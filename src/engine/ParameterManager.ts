@@ -49,8 +49,8 @@ export class ParameterManager {
       return null;
     }
 
-    // Get defaults from config
-    const defaults = configManager.get('parameters.defaults');
+    // Get defaults from config (with fallback)
+    const defaults = configManager.get('parameters.defaults') || { min: -10, max: 10, step: 0.1 };
 
     // Validate domain if provided
     if (typeof value === 'number' && options?.domain) {
@@ -74,9 +74,9 @@ export class ParameterManager {
       domain: options?.domain,
       uiControl: options?.uiControl || {
         type: 'number',
-        min: defaults.min,
-        max: defaults.max,
-        step: defaults.step,
+        min: defaults?.min ?? -10,
+        max: defaults?.max ?? 10,
+        step: defaults?.step ?? 0.1,
       },
       role: options?.role,
       metadata: {

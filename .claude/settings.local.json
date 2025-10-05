@@ -13,7 +13,11 @@
       "Bash(git branch:*)",
       "Bash(git config:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Initial commit - MVP Complete (Phases 1-8)\n\n🎉 Parametric Keyframe Studio v1.0 - MVP Complete\n\nFeatures:\n- ✅ Configuration system (22+ config files, zero hard-coded values)\n- ✅ Real-time 2D visualization (60 FPS, high-DPI)\n- ✅ Parameter & expression engine (math.js, dependencies)\n- ✅ Function plotting (Greek symbols, implicit mult, auto-params)\n- ✅ Keyframe timeline (smooth interpolation, 5 easing curves)\n- ✅ Desmos JSON import (numeric parameters)\n- ✅ PNG export (720p - 4K)\n- ✅ Manim script export (Python generation)\n- ✅ Project save/load (.pkstudio format, full state)\n\nArchitecture:\n- React 19 + TypeScript 5.9\n- 51 TypeScript files, 19 config files\n- Clean build (0 errors, 0 warnings)\n- DRY principles, configuration-driven\n\nStatus: Production-ready, needs tests and docs\n\nSee MVP_COMPLETE.md and COMPREHENSIVE_REVIEW.md for details.\n\n🤖 Generated with Claude Code\nEOF\n)\")",
-      "Bash(npm run test:run:*)"
+      "Bash(npm run test:run:*)",
+      "Bash(git remote add origin https://github.com/tsolomon89/manim-director-suite.git)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
