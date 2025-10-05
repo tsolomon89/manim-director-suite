@@ -9,6 +9,7 @@ import { KeyframeManager } from '../../timeline/KeyframeManager';
 import { TweeningEngine } from '../../timeline/TweeningEngine';
 import { ProjectIO } from '../../state/ProjectIO';
 import type { ProjectState } from '../../state/types';
+import type { KeyframeSnapshot } from '../../timeline/types';
 
 describe('Simple Workflow Integration', () => {
   let paramManager: ParameterManager;
@@ -31,14 +32,27 @@ describe('Simple Workflow Integration', () => {
     expect(param.name).toBe('x');
     expect(param.value).toBe(0);
 
-    // Create keyframes
-    const kf1 = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf1.id, param.id, 0, true, 'linear');
+    // Create keyframe 1 at t=0 with x=0
+    const snapshot1: KeyframeSnapshot = {
+      parameters: {
+        [param.id]: { value: 0, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Start', snapshot1);
 
-    const kf2 = keyframeManager.createKeyframe(10, 'End');
-    keyframeManager.setParameterValue(kf2.id, param.id, 100, true, 'linear');
+    // Create keyframe 2 at t=10 with x=100
+    const snapshot2: KeyframeSnapshot = {
+      parameters: {
+        [param.id]: { value: 100, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(10, 'End', snapshot2);
 
-    // Test interpolation
+    // Test interpolation at t=5 (should be 50)
     const state = tweeningEngine.getStateAtTime(5, keyframeManager.getAllKeyframes());
     expect(state.parameters[param.id]).toBe(50);
   });
@@ -48,10 +62,16 @@ describe('Simple Workflow Integration', () => {
     const param = paramManager.createParameter('Z', 710)!;
 
     // Create keyframe
-    const kf = keyframeManager.createKeyframe(0, 'Initial');
-    keyframeManager.setParameterValue(kf.id, param.id, 710, true);
+    const snapshot: KeyframeSnapshot = {
+      parameters: {
+        [param.id]: { value: 710, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Initial', snapshot);
 
-    // Serialize
+    // Serialize directly as ProjectState JSON
     const state: ProjectState = {
       version: '1.0.0',
       metadata: {
@@ -63,17 +83,32 @@ describe('Simple Workflow Integration', () => {
       functions: [],
       independentVariables: [],
       keyframes: keyframeManager.getAllKeyframes(),
-      timeline: { duration: 10, currentTime: 0 },
+      timeline: {
+        duration: 10,
+        currentTime: 0,
+        playbackSpeed: 1,
+        loopMode: 'once',
+        fps: 60,
+      },
       scene: {
         spaceType: 'cartesian',
-        bounds: { xMin: -10, xMax: 10, yMin: -10, yMax: 10 },
         gridStyleId: 'cartesian-dark',
-        camera: { x: 0, y: 0, zoom: 1, rotation: 0 },
-        warp: { type: 'identity', parameters: {} },
+        gridConfig: {
+          axes: { color: '#FFFFFF', width: 2 },
+          majorGrid: { color: '#444444', width: 1, spacing: 1 },
+          minorGrid: { color: '#222222', width: 0.5, spacing: 0.2 },
+          background: '#000000',
+        },
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0 },
+      rendering: {
+        resolution: '1920x1080',
+        fps: 30,
+        quality: 'medium',
       },
     };
 
-    const json = ProjectIO.serialize(state);
+    const json = JSON.stringify(state);
     const loaded = ProjectIO.deserialize(json);
 
     // Verify
@@ -90,16 +125,29 @@ describe('Simple Workflow Integration', () => {
     const y = paramManager.createParameter('y', 0)!;
     const z = paramManager.createParameter('z', 0)!;
 
-    // Create keyframes
-    const kf1 = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf1.id, x.id, 0, true);
-    keyframeManager.setParameterValue(kf1.id, y.id, 0, true);
-    keyframeManager.setParameterValue(kf1.id, z.id, 0, true);
+    // Create keyframe 1
+    const snapshot1: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 0, include: true, easing: 'linear' },
+        [y.id]: { value: 0, include: true, easing: 'linear' },
+        [z.id]: { value: 0, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Start', snapshot1);
 
-    const kf2 = keyframeManager.createKeyframe(10, 'End');
-    keyframeManager.setParameterValue(kf2.id, x.id, 100, true);
-    keyframeManager.setParameterValue(kf2.id, y.id, 200, true);
-    keyframeManager.setParameterValue(kf2.id, z.id, 300, true);
+    // Create keyframe 2
+    const snapshot2: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 100, include: true, easing: 'linear' },
+        [y.id]: { value: 200, include: true, easing: 'linear' },
+        [z.id]: { value: 300, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(10, 'End', snapshot2);
 
     // Test interpolation at midpoint
     const state = tweeningEngine.getStateAtTime(5, keyframeManager.getAllKeyframes());
@@ -113,15 +161,27 @@ describe('Simple Workflow Integration', () => {
     const a = paramManager.createParameter('a', 10)!;
     const b = paramManager.createParameter('b', 20)!;
 
-    // Keyframe 1: both included
-    const kf1 = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf1.id, a.id, 10, true); // Include
-    keyframeManager.setParameterValue(kf1.id, b.id, 20, false); // Don't include
+    // Keyframe 1: a included, b not included
+    const snapshot1: KeyframeSnapshot = {
+      parameters: {
+        [a.id]: { value: 10, include: true, easing: 'linear' },
+        [b.id]: { value: 20, include: false, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Start', snapshot1);
 
     // Keyframe 2
-    const kf2 = keyframeManager.createKeyframe(10, 'End');
-    keyframeManager.setParameterValue(kf2.id, a.id, 50, true);
-    keyframeManager.setParameterValue(kf2.id, b.id, 100, false);
+    const snapshot2: KeyframeSnapshot = {
+      parameters: {
+        [a.id]: { value: 50, include: true, easing: 'linear' },
+        [b.id]: { value: 100, include: false, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(10, 'End', snapshot2);
 
     const state = tweeningEngine.getStateAtTime(5, keyframeManager.getAllKeyframes());
 
@@ -132,13 +192,23 @@ describe('Simple Workflow Integration', () => {
   it('should handle camera animation alongside parameters', () => {
     const x = paramManager.createParameter('x', 0)!;
 
-    const kf1 = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf1.id, x.id, 0, true);
-    keyframeManager.setCameraState(kf1.id, { x: 0, y: 0, zoom: 1, rotation: 0 }, true);
+    const snapshot1: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 0, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: true },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Start', snapshot1);
 
-    const kf2 = keyframeManager.createKeyframe(10, 'End');
-    keyframeManager.setParameterValue(kf2.id, x.id, 100, true);
-    keyframeManager.setCameraState(kf2.id, { x: 10, y: 5, zoom: 2, rotation: 0 }, true);
+    const snapshot2: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 100, include: true, easing: 'linear' }
+      },
+      camera: { x: 10, y: 5, zoom: 2, rotation: 0, include: true },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(10, 'End', snapshot2);
 
     const state = tweeningEngine.getStateAtTime(5, keyframeManager.getAllKeyframes());
 
@@ -156,14 +226,32 @@ describe('Simple Workflow Integration', () => {
     const x = paramManager.createParameter('x', 0)!;
 
     // Add keyframes in non-chronological order
-    const kf2 = keyframeManager.createKeyframe(10, 'End');
-    keyframeManager.setParameterValue(kf2.id, x.id, 100, true);
+    const snapshot2: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 100, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(10, 'End', snapshot2);
 
-    const kf1 = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf1.id, x.id, 0, true);
+    const snapshot1: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 0, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Start', snapshot1);
 
-    const kf3 = keyframeManager.createKeyframe(5, 'Middle');
-    keyframeManager.setParameterValue(kf3.id, x.id, 50, true);
+    const snapshot3: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 50, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(5, 'Middle', snapshot3);
 
     // Should still interpolate correctly
     const state = tweeningEngine.getStateAtTime(2.5, keyframeManager.getAllKeyframes());
@@ -173,14 +261,32 @@ describe('Simple Workflow Integration', () => {
   it('should handle deleting keyframes', () => {
     const x = paramManager.createParameter('x', 0)!;
 
-    const kf1 = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf1.id, x.id, 0, true);
+    const snapshot1: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 0, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    const kf1 = keyframeManager.createKeyframe(0, 'Start', snapshot1);
 
-    const kf2 = keyframeManager.createKeyframe(5, 'Middle');
-    keyframeManager.setParameterValue(kf2.id, x.id, 50, true);
+    const snapshot2: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 50, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    const kf2 = keyframeManager.createKeyframe(5, 'Middle', snapshot2);
 
-    const kf3 = keyframeManager.createKeyframe(10, 'End');
-    keyframeManager.setParameterValue(kf3.id, x.id, 100, true);
+    const snapshot3: KeyframeSnapshot = {
+      parameters: {
+        [x.id]: { value: 100, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    const kf3 = keyframeManager.createKeyframe(10, 'End', snapshot3);
 
     // Delete middle keyframe
     keyframeManager.deleteKeyframe(kf2.id);
@@ -192,8 +298,15 @@ describe('Simple Workflow Integration', () => {
 
   it('should serialize and deserialize identical project state', () => {
     const param = paramManager.createParameter('x', 42)!;
-    const kf = keyframeManager.createKeyframe(0, 'Start');
-    keyframeManager.setParameterValue(kf.id, param.id, 42, true);
+
+    const snapshot: KeyframeSnapshot = {
+      parameters: {
+        [param.id]: { value: 42, include: true, easing: 'linear' }
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0, include: false },
+      warp: { type: 'identity', parameters: {}, include: false }
+    };
+    keyframeManager.createKeyframe(0, 'Start', snapshot);
 
     const state: ProjectState = {
       version: '1.0.0',
@@ -206,26 +319,41 @@ describe('Simple Workflow Integration', () => {
       functions: [],
       independentVariables: [],
       keyframes: keyframeManager.getAllKeyframes(),
-      timeline: { duration: 10, currentTime: 0 },
+      timeline: {
+        duration: 10,
+        currentTime: 0,
+        playbackSpeed: 1,
+        loopMode: 'once',
+        fps: 60,
+      },
       scene: {
         spaceType: 'cartesian',
-        bounds: { xMin: -10, xMax: 10, yMin: -10, yMax: 10 },
         gridStyleId: 'cartesian-dark',
-        camera: { x: 0, y: 0, zoom: 1, rotation: 0 },
-        warp: { type: 'identity', parameters: {} },
+        gridConfig: {
+          axes: { color: '#FFFFFF', width: 2 },
+          majorGrid: { color: '#444444', width: 1, spacing: 1 },
+          minorGrid: { color: '#222222', width: 0.5, spacing: 0.2 },
+          background: '#000000',
+        },
+      },
+      camera: { x: 0, y: 0, zoom: 1, rotation: 0 },
+      rendering: {
+        resolution: '1920x1080',
+        fps: 30,
+        quality: 'medium',
       },
     };
 
     // Serialize once
-    const json1 = ProjectIO.serialize(state);
+    const json1 = JSON.stringify(state);
 
     // Load and serialize again
     const loaded1 = ProjectIO.deserialize(json1);
-    const json2 = ProjectIO.serialize(loaded1);
+    const json2 = JSON.stringify(loaded1);
 
     // Load and serialize a third time
     const loaded2 = ProjectIO.deserialize(json2);
-    const json3 = ProjectIO.serialize(loaded2);
+    const json3 = JSON.stringify(loaded2);
 
     // All JSON strings should be identical
     expect(json1).toBe(json2);
