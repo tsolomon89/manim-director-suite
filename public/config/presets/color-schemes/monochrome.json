@@ -1,0 +1,14 @@
+{
+  "id": "monochrome",
+  "name": "Monochrome",
+  "description": "Classic black and white",
+  "colors": {
+    "primary": "#FFFFFF",
+    "secondary": "#CCCCCC",
+    "accent": "#888888",
+    "background": "#000000",
+    "text": "#FFFFFF",
+    "grid": "#444444",
+    "axes": "#FFFFFF"
+  }
+}

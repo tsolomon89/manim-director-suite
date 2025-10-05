@@ -1,0 +1,14 @@
+{
+  "id": "scientific",
+  "name": "Scientific",
+  "description": "Professional color scheme for technical content",
+  "colors": {
+    "primary": "#4A90E2",
+    "secondary": "#50E3C2",
+    "accent": "#F5A623",
+    "background": "#1E1E1E",
+    "text": "#E8E8E8",
+    "grid": "#444444",
+    "axes": "#FFFFFF"
+  }
+}

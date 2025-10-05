@@ -1,0 +1,26 @@
+.preset-selector {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #1a1a1a;
+  color: #e8e8e8;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.preset-selector:hover {
+  border-color: #4A90E2;
+}
+
+.preset-selector:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.preset-selector option {
+  background-color: #1a1a1a;
+  color: #e8e8e8;
+}

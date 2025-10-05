@@ -1,0 +1,9 @@
+{
+  "id": "radial",
+  "name": "Radial Distortion",
+  "description": "Radial expansion/contraction from origin",
+  "type": "radial",
+  "parameters": {
+    "intensity": 1.0
+  }
+}

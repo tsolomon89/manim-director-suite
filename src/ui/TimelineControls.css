@@ -1,0 +1,93 @@
+/**
+ * TimelineControls Styles
+ * Phase 5: Keyframes & Timeline
+ */
+
+.timeline-controls {
+  background: #2a2a2a;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.transport-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.control-btn {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #ddd;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.control-btn:hover {
+  background: #4a4a4a;
+  border-color: #666;
+}
+
+.control-btn:active {
+  background: #2a2a2a;
+  transform: scale(0.95);
+}
+
+.control-btn.primary {
+  background: #4a9eff;
+  border-color: #6eb4ff;
+  color: white;
+  font-weight: bold;
+}
+
+.control-btn.primary:hover {
+  background: #5aafff;
+  border-color: #7ec4ff;
+}
+
+.speed-control,
+.loop-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.speed-control label,
+.loop-control label {
+  color: #aaa;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.speed-control select,
+.loop-control select {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #ddd;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.speed-control select:hover,
+.loop-control select:hover {
+  border-color: #666;
+}
+
+.speed-control select:focus,
+.loop-control select:focus {
+  outline: none;
+  border-color: #4a9eff;
+}

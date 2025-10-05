@@ -1,0 +1,31 @@
+{
+  "id": "cartesian-light",
+  "name": "Light Cartesian",
+  "description": "Clean light theme for documentation",
+  "axes": {
+    "color": "#000000",
+    "width": 2,
+    "showArrows": true,
+    "arrowSize": 10
+  },
+  "majorGrid": {
+    "color": "#CCCCCC",
+    "width": 1,
+    "spacing": 1.0,
+    "visible": true
+  },
+  "minorGrid": {
+    "color": "#E5E5E5",
+    "width": 0.5,
+    "spacing": 0.2,
+    "visible": true
+  },
+  "labels": {
+    "show": true,
+    "color": "#333333",
+    "fontSize": 12,
+    "fontFamily": "monospace",
+    "precision": 2
+  },
+  "background": "#FFFFFF"
+}

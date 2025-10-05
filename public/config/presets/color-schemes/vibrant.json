@@ -1,0 +1,14 @@
+{
+  "id": "vibrant",
+  "name": "Vibrant",
+  "description": "High energy colors for engaging presentations",
+  "colors": {
+    "primary": "#FF6B6B",
+    "secondary": "#4ECDC4",
+    "accent": "#FFE66D",
+    "background": "#2D2D2D",
+    "text": "#F7F7F7",
+    "grid": "#555555",
+    "axes": "#FFFFFF"
+  }
+}

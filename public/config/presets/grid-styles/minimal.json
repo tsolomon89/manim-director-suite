@@ -1,0 +1,31 @@
+{
+  "id": "minimal",
+  "name": "Minimal",
+  "description": "Axes only, no grid",
+  "axes": {
+    "color": "#888888",
+    "width": 1.5,
+    "showArrows": true,
+    "arrowSize": 8
+  },
+  "majorGrid": {
+    "color": "#444444",
+    "width": 0.5,
+    "spacing": 1.0,
+    "visible": false
+  },
+  "minorGrid": {
+    "color": "#2A2A2A",
+    "width": 0.25,
+    "spacing": 0.2,
+    "visible": false
+  },
+  "labels": {
+    "show": false,
+    "color": "#CCCCCC",
+    "fontSize": 12,
+    "fontFamily": "monospace",
+    "precision": 2
+  },
+  "background": "#000000"
+}

@@ -1,0 +1,175 @@
+/**
+ * ValueControl Styles
+ */
+
+.value-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.value-control.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.value-label {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.value-control-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+/* Step Buttons */
+.step-button {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.step-button:hover:not(:disabled) {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+.step-button:active:not(:disabled) {
+  background: #1a1a1a;
+  transform: scale(0.95);
+}
+
+.step-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Slider */
+.value-slider {
+  flex: 1;
+  min-width: 80px;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #444;
+  border-radius: 3px;
+  outline: none;
+  transition: background 0.15s ease;
+}
+
+.value-slider:hover {
+  background: #4a4a4a;
+}
+
+.value-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #4a9eff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.value-slider::-webkit-slider-thumb:hover {
+  background: #6eb4ff;
+  transform: scale(1.1);
+}
+
+.value-slider::-webkit-slider-thumb:active {
+  background: #2a7eff;
+  transform: scale(1.05);
+}
+
+.value-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #4a9eff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.value-slider::-moz-range-thumb:hover {
+  background: #6eb4ff;
+  transform: scale(1.1);
+}
+
+.value-slider::-moz-range-thumb:active {
+  background: #2a7eff;
+  transform: scale(1.05);
+}
+
+/* Value Display/Input */
+.value-display-wrapper {
+  flex-shrink: 0;
+  min-width: 70px;
+}
+
+.value-display {
+  padding: 6px 10px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 3px;
+  color: #ddd;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  text-align: center;
+  cursor: text;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.value-display:hover {
+  background: #3a3a3a;
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.1);
+}
+
+.value-input-edit {
+  width: 100%;
+  padding: 6px 10px;
+  background: #1a1a1a;
+  border: 2px solid #4a9eff;
+  border-radius: 3px;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+.value-input-edit::-webkit-inner-spin-button,
+.value-input-edit::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Layout without slider (number-only mode) */
+.value-control-inner:has(.value-display-wrapper:first-child) {
+  justify-content: flex-end;
+}
+
+.value-control-inner:has(.value-display-wrapper:first-child) .value-display-wrapper {
+  min-width: 100px;
+}

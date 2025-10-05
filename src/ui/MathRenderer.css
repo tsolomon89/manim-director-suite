@@ -1,0 +1,190 @@
+/* Math Renderer Styles */
+
+.math-renderer {
+  font-family: 'Cambria Math', 'STIX Two Math', 'Latin Modern Math', serif;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+.math-inline {
+  display: inline;
+}
+
+.math-block {
+  display: block;
+  text-align: center;
+  padding: 0.5em 0;
+}
+
+/* Fraction rendering */
+.fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 0.2em;
+  font-size: 0.9em;
+}
+
+.fraction .numerator {
+  border-bottom: 1px solid currentColor;
+  padding: 0 0.3em 0.1em;
+}
+
+.fraction .denominator {
+  padding: 0.1em 0.3em 0;
+}
+
+/* Superscripts and subscripts */
+sup {
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+sub {
+  font-size: 0.75em;
+  vertical-align: sub;
+  line-height: 0;
+}
+
+/* Math input with preview */
+.math-input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.math-input {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.math-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.math-preview {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 0.5em;
+  font-size: 0.95em;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Greek Symbol Picker */
+.greek-symbol-picker {
+  position: absolute;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1em;
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.picker-header h3 {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.symbol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 0.5em;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.symbol-button {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 0.5em;
+  font-size: 1.2em;
+  font-family: 'Cambria Math', 'STIX Two Math', serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.symbol-button:hover {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  transform: scale(1.1);
+}
+
+.symbol-button:active {
+  transform: scale(0.95);
+}
+
+/* Scrollbar styling for symbol grid */
+.symbol-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.symbol-grid::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.symbol-grid::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.symbol-grid::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

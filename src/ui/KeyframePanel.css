@@ -1,0 +1,239 @@
+/**
+ * KeyframePanel Styles
+ * Phase 5: Keyframes & Timeline
+ */
+
+.keyframe-panel {
+  background: #2a2a2a;
+  padding: 16px;
+  border-radius: 4px;
+  color: #ddd;
+}
+
+.keyframe-panel h3 {
+  margin: 0 0 16px 0;
+  color: #fff;
+  font-size: 16px;
+  border-bottom: 2px solid #4a9eff;
+  padding-bottom: 8px;
+}
+
+.keyframe-panel h4 {
+  margin: 12px 0 8px 0;
+  color: #bbb;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.keyframe-create {
+  background: #333;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.conflict-warning {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255, 165, 0, 0.15);
+  border: 1px solid rgba(255, 165, 0, 0.4);
+  border-radius: 3px;
+  color: #ffaa00;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.input-group input {
+  flex: 1;
+  background: #2a2a2a;
+  border: 1px solid #555;
+  color: #ddd;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #4a9eff;
+}
+
+.input-group button {
+  background: #4a9eff;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.input-group button:hover {
+  background: #5aafff;
+}
+
+.keyframe-list {
+  margin-bottom: 16px;
+}
+
+.keyframe-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.keyframe-item {
+  background: #333;
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.keyframe-item:hover {
+  border-color: #555;
+  background: #3a3a3a;
+}
+
+.keyframe-item.selected {
+  border-color: #4a9eff;
+  background: #2d3a4a;
+}
+
+.keyframe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.keyframe-label {
+  font-weight: 500;
+  color: #fff;
+}
+
+.keyframe-time {
+  color: #888;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.keyframe-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.action-btn {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: #4a4a4a;
+}
+
+.action-btn.delete:hover {
+  background: #aa3333;
+  border-color: #cc4444;
+}
+
+.empty-message {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.keyframe-details {
+  background: #333;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.detail-group {
+  margin-bottom: 12px;
+}
+
+.detail-group label {
+  display: block;
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.detail-group span {
+  color: #ddd;
+  font-size: 13px;
+}
+
+.parameter-count {
+  color: #4a9eff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.easing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.easing-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: #2a2a2a;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.param-id {
+  color: #bbb;
+  font-family: monospace;
+}
+
+.easing-name {
+  color: #4a9eff;
+  font-weight: 500;
+}
+
+.help-text {
+  background: #252525;
+  padding: 12px;
+  border-radius: 4px;
+  border-left: 3px solid #4a9eff;
+}
+
+.help-text p {
+  margin: 0 0 8px 0;
+  color: #aaa;
+  font-size: 12px;
+}
+
+.help-text ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #888;
+  font-size: 11px;
+}
+
+.help-text li {
+  margin-bottom: 4px;
+}

@@ -1,0 +1,10 @@
+{
+  "theme": "dark",
+  "autoSave": true,
+  "autoSaveIntervalMs": 30000,
+  "recentProjects": [],
+  "viewport": {
+    "renderMode": "high",
+    "showFps": true
+  }
+}

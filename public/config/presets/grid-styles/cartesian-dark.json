@@ -1,0 +1,31 @@
+{
+  "id": "cartesian-dark",
+  "name": "Dark Cartesian",
+  "description": "High contrast for presentations",
+  "axes": {
+    "color": "#FFFFFF",
+    "width": 3,
+    "showArrows": true,
+    "arrowSize": 12
+  },
+  "majorGrid": {
+    "color": "#505050",
+    "width": 1.5,
+    "spacing": 1.0,
+    "visible": true
+  },
+  "minorGrid": {
+    "color": "#303030",
+    "width": 0.75,
+    "spacing": 0.2,
+    "visible": true
+  },
+  "labels": {
+    "show": true,
+    "color": "#E0E0E0",
+    "fontSize": 13,
+    "fontFamily": "system-ui, -apple-system, sans-serif",
+    "precision": 1
+  },
+  "background": "#0a0a0a"
+}

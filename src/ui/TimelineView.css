@@ -1,0 +1,22 @@
+/**
+ * TimelineView Styles
+ * Phase 5: Keyframes & Timeline
+ */
+
+.timeline-view {
+  width: 100%;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.timeline-canvas {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+
+.timeline-canvas:active {
+  cursor: grabbing;
+}

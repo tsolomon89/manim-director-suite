@@ -1,0 +1,31 @@
+{
+  "id": "manim-style",
+  "name": "Manim Style",
+  "description": "3Blue1Brown inspired mathematical visualization",
+  "axes": {
+    "color": "#FFFFFF",
+    "width": 3,
+    "showArrows": true,
+    "arrowSize": 14
+  },
+  "majorGrid": {
+    "color": "#3A3A3A",
+    "width": 1.5,
+    "spacing": 1.0,
+    "visible": true
+  },
+  "minorGrid": {
+    "color": "#222222",
+    "width": 0.5,
+    "spacing": 0.25,
+    "visible": true
+  },
+  "labels": {
+    "show": true,
+    "color": "#C0C0C0",
+    "fontSize": 14,
+    "fontFamily": "system-ui, -apple-system, sans-serif",
+    "precision": 1
+  },
+  "background": "#1a1a1a"
+}

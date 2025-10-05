@@ -1,0 +1,60 @@
+{
+  "version": 11,
+  "graph": {
+    "viewport": {
+      "xmin": -1,
+      "ymin": -1.5,
+      "xmax": 1.5,
+      "ymax": 2
+    }
+  },
+  "expressions": {
+    "list": [
+      {
+        "type": "expression",
+        "id": "1",
+        "latex": "Z=710",
+        "slider": {
+          "min": "100",
+          "max": "1000",
+          "step": "10"
+        }
+      },
+      {
+        "type": "expression",
+        "id": "2",
+        "latex": "K=-1",
+        "slider": {
+          "min": "-10",
+          "max": "10",
+          "step": "1"
+        }
+      },
+      {
+        "type": "expression",
+        "id": "3",
+        "latex": "f_{0}=\tau^{-1}",
+        "slider": {
+          "min": "1",
+          "max": "360",
+          "step": "1"
+        }
+      },
+      {
+        "type": "expression",
+        "id": "4",
+        "latex": "f=\frac{1}{f_{0}}\cdot\tau^{K}"
+      },
+      {
+        "type": "expression",
+        "id": "5",
+        "latex": "n=[0...Z-1]"
+      },
+      {
+        "type": "expression",
+        "id": "6",
+        "latex": "p=\left(Z,K\right)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,344 @@
+/**
+ * DesmosImportDialog Styles
+ * Phase 4: Desmos Import - MVP
+ */
+
+.desmos-import-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.desmos-import-dialog {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.close-button:hover {
+  color: #fff;
+}
+
+.dialog-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.upload-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.upload-button {
+  background: #4a9eff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.upload-button:hover {
+  background: #3a8eef;
+}
+
+.upload-hint {
+  margin-top: 1rem;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.import-options {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #252525;
+  border-radius: 4px;
+}
+
+.import-options h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.import-options label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.import-options input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.error-message {
+  background: #3d1a1a;
+  border: 1px solid #6a2020;
+  padding: 1rem;
+  border-radius: 4px;
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+}
+
+.error-message strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.error-message pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.875rem;
+}
+
+.preview-section {
+  /* content fills naturally */
+}
+
+.preview-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  color: #fff;
+}
+
+.preview-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  background: #252525;
+  padding: 0.75rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.stat-value {
+  color: #4a9eff;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.selection-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.selection-controls button {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.selection-controls button:hover {
+  background: #444;
+}
+
+.selection-count {
+  margin-left: auto;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.expression-list {
+  /* content fills naturally */
+}
+
+.expression-list h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.expression-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #252525;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s;
+}
+
+.expression-item:hover {
+  background: #2a2a2a;
+}
+
+.expression-item input[type="checkbox"] {
+  margin-top: 0.25rem;
+  cursor: pointer;
+}
+
+.expression-info {
+  flex: 1;
+}
+
+.expression-name {
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.folder-badge {
+  background: #444;
+  color: #aaa;
+  padding: 0.125rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
+.expression-formula {
+  color: #4a9eff;
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 0.25rem;
+}
+
+.expression-slider {
+  color: #999;
+  font-size: 0.75rem;
+}
+
+.warnings-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #2a2a1a;
+  border: 1px solid #444422;
+  border-radius: 4px;
+}
+
+.warnings-section h4 {
+  margin: 0 0 0.5rem 0;
+  color: #ffd666;
+  font-size: 0.875rem;
+}
+
+.warnings-section ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #ccc;
+  font-size: 0.8125rem;
+}
+
+.warnings-section li {
+  margin-bottom: 0.25rem;
+}
+
+.dialog-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #333;
+}
+
+.dialog-footer button {
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  transition: all 0.2s;
+}
+
+.cancel-button {
+  background: #333;
+  color: white;
+}
+
+.cancel-button:hover {
+  background: #444;
+}
+
+.back-button {
+  background: #555;
+  color: white;
+}
+
+.back-button:hover {
+  background: #666;
+}
+
+.import-button {
+  background: #4a9eff;
+  color: white;
+  font-weight: 600;
+}
+
+.import-button:hover:not(:disabled) {
+  background: #3a8eef;
+}
+
+.import-button:disabled {
+  background: #333;
+  color: #666;
+  cursor: not-allowed;
+}

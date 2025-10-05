@@ -1,0 +1,37 @@
+[
+  {
+    "id": "linear",
+    "name": "Linear",
+    "type": "linear",
+    "formula": "t",
+    "discrete": false
+  },
+  {
+    "id": "smoothstep",
+    "name": "Smooth Step",
+    "type": "cubic",
+    "formula": "t * t * (3 - 2 * t)",
+    "discrete": false
+  },
+  {
+    "id": "ease-in",
+    "name": "Ease In",
+    "type": "cubic",
+    "formula": "t * t * t",
+    "discrete": false
+  },
+  {
+    "id": "ease-out",
+    "name": "Ease Out",
+    "type": "cubic",
+    "formula": "1 - (1 - t) * (1 - t) * (1 - t)",
+    "discrete": false
+  },
+  {
+    "id": "ease-in-out",
+    "name": "Ease In-Out",
+    "type": "cubic",
+    "formula": "t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ^ 3 / 2",
+    "discrete": false
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "id": "identity",
+  "name": "Identity (No Warp)",
+  "description": "No transformation applied",
+  "type": "identity",
+  "parameters": {}
+}

@@ -1,0 +1,31 @@
+{
+  "id": "polar-dark",
+  "name": "Dark Polar",
+  "description": "Polar coordinate grid with dark theme",
+  "axes": {
+    "color": "#FFFFFF",
+    "width": 2,
+    "showArrows": false,
+    "arrowSize": 0
+  },
+  "majorGrid": {
+    "color": "#555555",
+    "width": 1,
+    "spacing": 1.0,
+    "visible": true
+  },
+  "minorGrid": {
+    "color": "#333333",
+    "width": 0.5,
+    "spacing": 0.5,
+    "visible": true
+  },
+  "labels": {
+    "show": true,
+    "color": "#CCCCCC",
+    "fontSize": 12,
+    "fontFamily": "monospace",
+    "precision": 1
+  },
+  "background": "#000000"
+}

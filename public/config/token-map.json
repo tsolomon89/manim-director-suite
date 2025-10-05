@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "description": "Greek symbols, operators, and function name mappings for expression input",
+  "aliases": {
+    "pi": "\\pi",
+    "\\pi": "\\pi",
+    "tau": "\\tau",
+    "\\tau": "\\tau",
+    "alpha": "\\alpha",
+    "\\alpha": "\\alpha",
+    "beta": "\\beta",
+    "\\beta": "\\beta",
+    "gamma": "\\gamma",
+    "\\gamma": "\\gamma",
+    "Gamma": "\\Gamma",
+    "\\Gamma": "\\Gamma",
+    "delta": "\\delta",
+    "\\delta": "\\delta",
+    "Delta": "\\Delta",
+    "\\Delta": "\\Delta",
+    "epsilon": "\\epsilon",
+    "\\epsilon": "\\epsilon",
+    "zeta": "\\zeta",
+    "\\zeta": "\\zeta",
+    "eta": "\\eta",
+    "\\eta": "\\eta",
+    "theta": "\\theta",
+    "\\theta": "\\theta",
+    "Theta": "\\Theta",
+    "\\Theta": "\\Theta",
+    "iota": "\\iota",
+    "\\iota": "\\iota",
+    "kappa": "\\kappa",
+    "\\kappa": "\\kappa",
+    "lambda": "\\lambda",
+    "\\lambda": "\\lambda",
+    "Lambda": "\\Lambda",
+    "\\Lambda": "\\Lambda",
+    "mu": "\\mu",
+    "\\mu": "\\mu",
+    "nu": "\\nu",
+    "\\nu": "\\nu",
+    "xi": "\\xi",
+    "\\xi": "\\xi",
+    "Xi": "\\Xi",
+    "\\Xi": "\\Xi",
+    "omicron": "\\omicron",
+    "\\omicron": "\\omicron",
+    "rho": "\\rho",
+    "\\rho": "\\rho",
+    "sigma": "\\sigma",
+    "\\sigma": "\\sigma",
+    "Sigma": "\\Sigma",
+    "\\Sigma": "\\Sigma",
+    "phi": "\\phi",
+    "\\phi": "\\phi",
+    "Phi": "\\Phi",
+    "\\Phi": "\\Phi",
+    "chi": "\\chi",
+    "\\chi": "\\chi",
+    "psi": "\\psi",
+    "\\psi": "\\psi",
+    "Psi": "\\Psi",
+    "\\Psi": "\\Psi",
+    "omega": "\\omega",
+    "\\omega": "\\omega",
+    "Omega": "\\Omega",
+    "\\Omega": "\\Omega",
+    "sqrt": "\\sqrt",
+    "\\sqrt": "\\sqrt",
+    "log": "\\log",
+    "\\log": "\\log",
+    "ln": "\\ln",
+    "\\ln": "\\ln",
+    "infty": "\\infty",
+    "\\infty": "\\infty"
+  },
+  "constants": {
+    "\\pi": {
+      "glyph": "π",
+      "kind": "constant",
+      "eval": "Math.PI",
+      "description": "Pi (3.14159...)"
+    },
+    "\\tau": {
+      "glyph": "τ",
+      "kind": "constant",
+      "eval": "2 * Math.PI",
+      "description": "Tau (2π, 6.28318...)"
+    },
+    "e": {
+      "glyph": "e",
+      "kind": "constant",
+      "eval": "Math.E",
+      "description": "Euler's number (2.71828...)"
+    },
+    "i": {
+      "glyph": "i",
+      "kind": "imaginary",
+      "eval": null,
+      "description": "Imaginary unit (√-1)"
+    },
+    "\\infty": {
+      "glyph": "∞",
+      "kind": "constant",
+      "eval": "Infinity",
+      "description": "Infinity"
+    }
+  },
+  "greekGlyphs": {
+    "\\alpha": "α",
+    "\\beta": "β",
+    "\\gamma": "γ",
+    "\\Gamma": "Γ",
+    "\\delta": "δ",
+    "\\Delta": "Δ",
+    "\\epsilon": "ε",
+    "\\zeta": "ζ",
+    "\\eta": "η",
+    "\\theta": "θ",
+    "\\Theta": "Θ",
+    "\\iota": "ι",
+    "\\kappa": "κ",
+    "\\lambda": "λ",
+    "\\Lambda": "Λ",
+    "\\mu": "μ",
+    "\\nu": "ν",
+    "\\xi": "ξ",
+    "\\Xi": "Ξ",
+    "\\omicron": "ο",
+    "\\pi": "π",
+    "\\rho": "ρ",
+    "\\sigma": "σ",
+    "\\Sigma": "Σ",
+    "\\tau": "τ",
+    "\\phi": "φ",
+    "\\Phi": "Φ",
+    "\\chi": "χ",
+    "\\psi": "ψ",
+    "\\Psi": "Ψ",
+    "\\omega": "ω",
+    "\\Omega": "Ω"
+  },
+  "operators": {
+    "\\cdot": {
+      "glyph": "·",
+      "description": "Multiplication dot"
+    },
+    "\\times": {
+      "glyph": "×",
+      "description": "Multiplication cross"
+    },
+    "\\le": {
+      "glyph": "≤",
+      "description": "Less than or equal"
+    },
+    "\\ge": {
+      "glyph": "≥",
+      "description": "Greater than or equal"
+    },
+    "\\ne": {
+      "glyph": "≠",
+      "description": "Not equal"
+    },
+    "\\approx": {
+      "glyph": "≈",
+      "description": "Approximately equal"
+    },
+    "\\pm": {
+      "glyph": "±",
+      "description": "Plus-minus"
+    },
+    "\\infty": {
+      "glyph": "∞",
+      "description": "Infinity"
+    }
+  },
+  "functions": {
+    "\\sqrt": {
+      "description": "Square root"
+    },
+    "\\log": {
+      "description": "Logarithm"
+    },
+    "\\ln": {
+      "description": "Natural logarithm"
+    },
+    "\\sin": {
+      "description": "Sine"
+    },
+    "\\cos": {
+      "description": "Cosine"
+    },
+    "\\tan": {
+      "description": "Tangent"
+    }
+  }
+}
