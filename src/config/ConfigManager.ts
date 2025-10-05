@@ -89,22 +89,18 @@ export class ConfigManager {
    *   - config.get('camera.zoomMin')
    *   - config.get('grid.defaultStyleId')
    */
-  get<T = any>(path: string): T {
+  get<T = any>(path: string): T | undefined {
     const keys = path.split('.');
     let value: any = this.config.defaults;
 
     for (const key of keys) {
       if (value === undefined || value === null) {
-        throw new Error(`Configuration path not found: ${path}`);
+        return undefined;
       }
       value = value[key];
     }
 
-    if (value === undefined) {
-      throw new Error(`Configuration value not found: ${path}`);
-    }
-
-    return value as T;
+    return value as T | undefined;
   }
 
   /**
@@ -141,7 +137,18 @@ export class ConfigManager {
    * Get a specific preset by ID
    */
   getPreset<T>(category: keyof PresetsConfig, id: string): T | undefined {
-    return this.config.presets[category].find((preset: any) => preset.id === id) as T | undefined;
+    const presets = this.config.presets[category];
+    if (!presets) return undefined;
+    return presets.find((preset: any) => preset.id === id) as T | undefined;
+  }
+
+  /**
+   * Get all preset IDs for a category
+   */
+  getPresetIds(category: keyof PresetsConfig): string[] {
+    const presets = this.config.presets[category];
+    if (!presets) return [];
+    return presets.map((preset: any) => preset.id);
   }
 
   /**

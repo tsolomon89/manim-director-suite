@@ -33,8 +33,21 @@ export class ExpressionEngine {
    */
   evaluate(expression: string, scope: Record<string, number> = {}): ExpressionResult {
     try {
+      // Normalize expression (expand Greek symbols)
+      const normalized = this.normalizeExpression(expression);
+
+      // Add Greek constants to scope
+      const extendedScope = {
+        ...scope,
+        π: Math.PI,
+        τ: 2 * Math.PI,
+        e: Math.E,
+        pi: Math.PI,
+        tau: 2 * Math.PI,
+      };
+
       // Validate expression first
-      const validation = this.validate(expression);
+      const validation = this.validate(normalized);
       if (!validation.valid) {
         return {
           success: false,
@@ -42,8 +55,8 @@ export class ExpressionEngine {
         };
       }
 
-      // Evaluate with scope
-      const value = this.math.evaluate(expression, scope);
+      // Evaluate with extended scope
+      const value = this.math.evaluate(normalized, extendedScope);
 
       // Ensure result is a number
       if (typeof value !== 'number') {
@@ -53,11 +66,11 @@ export class ExpressionEngine {
         };
       }
 
-      // Check for invalid numbers
-      if (!isFinite(value)) {
+      // Check for invalid numbers (but allow Infinity for division by zero)
+      if (isNaN(value)) {
         return {
           success: false,
-          error: `Expression evaluates to ${value} (infinity or NaN)`,
+          error: `Expression evaluates to NaN`,
         };
       }
 
@@ -447,6 +460,16 @@ export class ExpressionEngine {
   }
 
   /**
+   * Extract free symbols from an expression
+   * @param expression - Expression to analyze
+   * @param formalParams - Formal parameters to exclude
+   * @returns Array of free symbol names
+   */
+  extractFreeSymbols(expression: string, formalParams: string[] = []): string[] {
+    return this.extractFreeDependencies(expression, formalParams);
+  }
+
+  /**
    * Extract formal parameters from a function LHS
    * @param lhs - Left-hand side (e.g., "f(x,y)")
    * @returns Array of formal parameter names
@@ -475,6 +498,9 @@ export class ExpressionEngine {
     let result = '';
     let i = 0;
     const len = expression.length;
+
+    // Pre-scan for function names to avoid inserting * between function name letters
+    const functionStarts = this.findFunctionCalls(expression);
 
     while (i < len) {
       const char = expression[i];
@@ -508,9 +534,13 @@ export class ExpressionEngine {
 
       // Check if we need to insert * after current character
       if (i + 1 < len) {
-        const needsMult = this.needsImplicitMultiplication(char, nextChar, expression, i);
-        if (needsMult) {
-          result += '*';
+        // Don't insert * if we're inside a function name
+        const inFunctionName = functionStarts.some(([start, end]) => i >= start && i < end);
+        if (!inFunctionName) {
+          const needsMult = this.needsImplicitMultiplication(char, nextChar, expression, i, functionStarts);
+          if (needsMult) {
+            result += '*';
+          }
         }
       }
 
@@ -521,20 +551,52 @@ export class ExpressionEngine {
   }
 
   /**
+   * Find all function call positions in expression
+   * Returns array of [start, end] indices for function names
+   */
+  private findFunctionCalls(expression: string): Array<[number, number]> {
+    const positions: Array<[number, number]> = [];
+
+    for (let i = 0; i < expression.length; i++) {
+      if (expression[i] === '(') {
+        // Look backward to find function name
+        let j = i - 1;
+        while (j >= 0 && this.isLetterOrGreek(expression[j])) {
+          j--;
+        }
+        const start = j + 1;
+        const functionName = expression.substring(start, i);
+
+        if (functionName && (this.isBuiltIn(functionName) || symbolRegistry.isBuiltin(functionName))) {
+          positions.push([start, i]);
+        }
+      }
+    }
+
+    return positions;
+  }
+
+  /**
    * Check if implicit multiplication is needed between two characters
    */
   private needsImplicitMultiplication(
     currentChar: string,
     nextChar: string,
-    expression: string,
-    currentIndex: number
+    _expression: string,
+    _currentIndex: number,
+    _functionStarts?: Array<[number, number]>
   ): boolean {
     // Rule 1: digit followed by letter or Greek symbol or (
     if (this.isDigit(currentChar) && (this.isLetterOrGreek(nextChar) || nextChar === '(')) {
       return true;
     }
 
-    // Rule 2: letter/Greek followed by letter/Greek (but not if starting subscript)
+    // Rule 2: letter/Greek followed by digit
+    if (this.isLetterOrGreek(currentChar) && this.isDigit(nextChar)) {
+      return true;
+    }
+
+    // Rule 3: letter/Greek followed by letter/Greek (but not if starting subscript)
     if (this.isLetterOrGreek(currentChar) && this.isLetterOrGreek(nextChar)) {
       // Don't insert if next is start of subscript
       if (nextChar !== '_') {
@@ -542,27 +604,15 @@ export class ExpressionEngine {
       }
     }
 
-    // Rule 3: ) followed by letter/Greek/digit/(
+    // Rule 4: ) followed by letter/Greek/digit/(
     if (currentChar === ')' && (this.isLetterOrGreek(nextChar) || this.isDigit(nextChar) || nextChar === '(')) {
       return true;
     }
 
-    // Rule 4: letter/Greek followed by (
+    // Rule 5: letter/Greek followed by (
+    // This is now handled by the function call pre-scanning
     if (this.isLetterOrGreek(currentChar) && nextChar === '(') {
-      // Check if this is a known function name (don't insert * before function calls)
-      const beforeIndex = currentIndex;
-      let functionName = '';
-      let j = beforeIndex;
-      while (j >= 0 && this.isLetterOrGreek(expression[j])) {
-        functionName = expression[j] + functionName;
-        j--;
-      }
-
-      // If it's a built-in function, don't insert multiplication
-      if (symbolRegistry.isBuiltin(functionName)) {
-        return false;
-      }
-
+      // Function calls are excluded by the inFunctionName check in the main loop
       return true;
     }
 

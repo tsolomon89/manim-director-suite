@@ -40,6 +40,12 @@ const FALLBACK_TOKEN_MAP: TokenMapConfig = {
     'i': { glyph: 'i', kind: 'imaginary', eval: null, description: 'Imaginary unit' },
   },
   greekGlyphs: {
+    'pi': 'π',
+    'tau': 'τ',
+    'alpha': 'α',
+    'beta': 'β',
+    'gamma': 'γ',
+    'Gamma': 'Γ',
     '\\pi': 'π',
     '\\tau': 'τ',
     '\\alpha': 'α',
@@ -246,13 +252,19 @@ export class SymbolRegistry {
    * @returns Normalized expression with glyphs
    */
   normalizeExpression(expression: string): string {
-    // First expand bare aliases (pi → π)
-    let normalized = this.expandAliases(expression);
+    let normalized = expression;
 
-    // Then expand LaTeX commands (\pi → π, \tau → τ)
-    for (const [latex, glyph] of Object.entries(this.tokenMap.greekGlyphs)) {
+    // First expand LaTeX commands (\pi → π, \tau → τ) - process backslash versions FIRST
+    const greekEntries = Object.entries(this.tokenMap.greekGlyphs);
+    // Sort so backslash versions come first
+    greekEntries.sort((a, b) => (b[0].includes('\\') ? 1 : 0) - (a[0].includes('\\') ? 1 : 0));
+
+    for (const [latex, glyph] of greekEntries) {
       normalized = normalized.replace(new RegExp(latex.replace(/\\/g, '\\\\'), 'g'), glyph);
     }
+
+    // Then expand bare aliases (pi → π) for any remaining
+    normalized = this.expandAliases(normalized);
 
     // Expand operators
     for (const [latex, info] of Object.entries(this.tokenMap.operators)) {

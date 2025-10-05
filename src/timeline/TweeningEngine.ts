@@ -206,8 +206,8 @@ export class TweeningEngine {
         continue;
       }
 
-      if (!paramBefore.include) {
-        // Not tweening - hold value
+      // If either keyframe doesn't include this parameter, hold the before value
+      if (!paramBefore.include || !paramAfter.include) {
         result.parameters[paramId] = paramBefore.value;
         continue;
       }
@@ -222,7 +222,8 @@ export class TweeningEngine {
     const camBefore = before.snapshot.camera;
     const camAfter = after.snapshot.camera;
 
-    if (camBefore.include) {
+    // If either keyframe doesn't include camera, hold the before state
+    if (camBefore.include && camAfter.include) {
       const easingFn = easingRegistry.get('smoothstep');
       const easedT = easingFn(clampedT);
 

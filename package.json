@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -17,13 +20,18 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/ui": "^3.2.4",
     "ajv": "^8.17.1",
+    "jsdom": "^27.0.0",
     "mathjs": "^14.8.1",
     "typescript": "^5.9.3",
     "vite": "^5.4.20",
+    "vitest": "^3.2.4",
     "zustand": "^5.0.8"
   }
 }
