@@ -277,8 +277,8 @@ function App() {
     // Build parameter map for auto-parameterization
     const paramMap = new Map(pm.getAllParameters().map(p => [p.name, p.id]));
 
-    // Get default independent variable (x) - create if doesn't exist
-    let defaultIndepVar = ivm.getVariable('x');
+    // Get default independent variable (x) - should already exist from constructor
+    let defaultIndepVar = ivm.getVariableByName('x');
     if (!defaultIndepVar) {
       const bounds = configManager.get('scene.bounds');
       const created = ivm.createVariable('x', {
