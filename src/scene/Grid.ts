@@ -20,7 +20,7 @@ export class Grid {
 
   constructor(space: Space) {
     this.space = space;
-    this.styleId = configManager.get<string>('grid.defaultStyleId');
+    this.styleId = configManager.get<string>('grid.defaultStyleId') || 'cartesian-dark';
   }
 
   /**

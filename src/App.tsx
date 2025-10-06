@@ -85,7 +85,7 @@ function App() {
     const loadConfig = async () => {
       try {
         await configManager.loadAll();
-        const defaultStyleId = configManager.get<string>('grid.defaultStyleId');
+        const defaultStyleId = configManager.get<string>('grid.defaultStyleId') || 'cartesian-dark';
         setSelectedGridStyle(defaultStyleId);
 
         // Initialize timeline

@@ -15,13 +15,18 @@ export class Camera {
 
   constructor() {
     // Load default position from config
-    const defaultPos = configManager.get<CameraState>('camera.defaultPosition');
+    const defaultPos = configManager.get<CameraState>('camera.defaultPosition') || {
+      x: 0,
+      y: 0,
+      zoom: 1.0,
+      rotation: 0
+    };
     this.state = { ...defaultPos };
 
     // Load camera settings from config
-    this.panSpeed = configManager.get<number>('camera.panSpeed');
-    this.zoomMin = configManager.get<number>('camera.zoomMin');
-    this.zoomMax = configManager.get<number>('camera.zoomMax');
+    this.panSpeed = configManager.get<number>('camera.panSpeed') ?? 1.0;
+    this.zoomMin = configManager.get<number>('camera.zoomMin') ?? 0.1;
+    this.zoomMax = configManager.get<number>('camera.zoomMax') ?? 10.0;
   }
 
   /**
@@ -81,7 +86,12 @@ export class Camera {
    * Reset camera to default position
    */
   reset(): void {
-    const defaultPos = configManager.get<CameraState>('camera.defaultPosition');
+    const defaultPos = configManager.get<CameraState>('camera.defaultPosition') || {
+      x: 0,
+      y: 0,
+      zoom: 1.0,
+      rotation: 0
+    };
     this.state = { ...defaultPos };
   }
 

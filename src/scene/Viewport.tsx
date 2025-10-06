@@ -189,7 +189,7 @@ export function Viewport({ gridStyleId, gridConfig, functions = [], parameterVal
     );
 
     // Zoom
-    const zoomSpeed = configManager.get<number>('camera.zoomSpeed');
+    const zoomSpeed = configManager.get<number>('camera.zoomSpeed') ?? 0.1;
     const factor = e.deltaY < 0 ? 1 + zoomSpeed : 1 - zoomSpeed;
 
     cameraRef.current.zoom(factor, worldPos.x, worldPos.y);
