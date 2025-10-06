@@ -1,0 +1,169 @@
+{
+  "version": "2.0.0",
+  "categories": [
+    {
+      "id": "user-guide",
+      "title": "User Guide",
+      "description": "Learn how to use Parametric Keyframe Studio",
+      "icon": "📖",
+      "order": 1,
+      "documents": [
+        {
+          "id": "getting-started",
+          "title": "Getting Started",
+          "file": "user-guide/getting-started.md",
+          "description": "Quick start guide and basic concepts",
+          "tags": ["basics", "tutorial", "intro"],
+          "order": 1
+        },
+        {
+          "id": "parameters",
+          "title": "Parameters",
+          "file": "user-guide/parameters.md",
+          "description": "Working with numeric parameters and expressions",
+          "tags": ["parameters", "expressions", "variables"],
+          "order": 2
+        },
+        {
+          "id": "functions",
+          "title": "Functions & Plotting",
+          "file": "user-guide/functions.md",
+          "description": "Creating and visualizing mathematical functions",
+          "tags": ["functions", "plotting", "graphs"],
+          "order": 3
+        },
+        {
+          "id": "timeline",
+          "title": "Timeline & Keyframes",
+          "file": "user-guide/timeline.md",
+          "description": "Animating with keyframes and interpolation",
+          "tags": ["animation", "keyframes", "timeline"],
+          "order": 4
+        },
+        {
+          "id": "export",
+          "title": "Export & Rendering",
+          "file": "user-guide/export.md",
+          "description": "Exporting PNGs, videos, and Manim scripts",
+          "tags": ["export", "render", "manim"],
+          "order": 5
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Reference",
+      "description": "Technical reference and syntax guides",
+      "icon": "📚",
+      "order": 2,
+      "documents": [
+        {
+          "id": "expression-syntax",
+          "title": "Expression Syntax",
+          "file": "reference/expression-syntax.md",
+          "description": "Mathematical expression syntax and functions",
+          "tags": ["syntax", "math", "expressions"],
+          "order": 1
+        },
+        {
+          "id": "keyboard-shortcuts",
+          "title": "Keyboard Shortcuts",
+          "file": "reference/keyboard-shortcuts.md",
+          "description": "Complete list of keyboard shortcuts",
+          "tags": ["shortcuts", "keyboard", "productivity"],
+          "order": 2
+        },
+        {
+          "id": "config-system",
+          "title": "Configuration System",
+          "file": "reference/config-system.md",
+          "description": "How the configuration-driven architecture works",
+          "tags": ["config", "presets", "customization"],
+          "order": 3
+        },
+        {
+          "id": "file-formats",
+          "title": "File Formats",
+          "file": "reference/file-formats.md",
+          "description": "Project files, Desmos JSON, and export formats",
+          "tags": ["files", "json", "formats"],
+          "order": 4
+        }
+      ]
+    },
+    {
+      "id": "developer",
+      "title": "Developer Docs",
+      "description": "For contributors and developers",
+      "icon": "💻",
+      "order": 3,
+      "documents": [
+        {
+          "id": "architecture",
+          "title": "Architecture Overview",
+          "file": "developer/architecture.md",
+          "description": "System architecture and design principles",
+          "tags": ["architecture", "design", "overview"],
+          "order": 1
+        },
+        {
+          "id": "testing",
+          "title": "Testing Guide",
+          "file": "developer/testing.md",
+          "description": "How to write and run tests",
+          "tags": ["testing", "qa", "unit-tests"],
+          "order": 2
+        },
+        {
+          "id": "contributing",
+          "title": "Contributing",
+          "file": "developer/contributing.md",
+          "description": "How to contribute to the project",
+          "tags": ["contributing", "development", "git"],
+          "order": 3
+        },
+        {
+          "id": "api-reference",
+          "title": "API Reference",
+          "file": "developer/api-reference.md",
+          "description": "Core APIs and TypeScript interfaces",
+          "tags": ["api", "typescript", "reference"],
+          "order": 4
+        }
+      ]
+    },
+    {
+      "id": "changelog",
+      "title": "Changelog",
+      "description": "Version history and future plans",
+      "icon": "📝",
+      "order": 4,
+      "documents": [
+        {
+          "id": "v1.0.0",
+          "title": "v1.0.0 - MVP Complete",
+          "file": "changelog/v1.0.0.md",
+          "description": "Initial MVP release with all 8 phases",
+          "tags": ["release", "mvp", "v1"],
+          "order": 1
+        },
+        {
+          "id": "v2.0.0",
+          "title": "v2.0.0 - Advanced Features",
+          "file": "changelog/v2.0.0.md",
+          "description": "P1 (Coordinate Plotting) and F20 (Implicit Functions)",
+          "tags": ["release", "v2", "coordinates", "implicit"],
+          "order": 2
+        },
+        {
+          "id": "roadmap",
+          "title": "Roadmap",
+          "file": "changelog/roadmap.md",
+          "description": "Future features and development plans",
+          "tags": ["roadmap", "future", "features"],
+          "order": 3
+        }
+      ]
+    }
+  ]
+}

@@ -23,7 +23,7 @@ const DEFAULT_COLORS = [
 export interface FunctionPanelNewProps {
   functions: FunctionDefinition[];
   independentVariables: IndependentVariable[];
-  onFunctionCreate: (fullExpression: string, color: string) => void;
+  onFunctionCreate: (fullExpression: string, color: string) => { success: boolean; errors?: string[] } | void;
   onFunctionUpdate: (id: string, updates: Partial<FunctionDefinition>) => void;
   onFunctionUpdateExpression: (id: string, newExpression: string) => void;
   onFunctionDelete: (id: string) => void;
@@ -69,7 +69,7 @@ export function FunctionPanelNew({
 
     // Validate full expression (should have =)
     if (!normalized.includes('=')) {
-      setCreateError('Expression must be in form: f(x) = ...');
+      setCreateError('Expression must be in form: f(x) = ... or b = sin(x)');
       return;
     }
 
@@ -80,24 +80,28 @@ export function FunctionPanelNew({
       return;
     }
 
-    // Accept function or anonymous plot (y = expr)
+    // Accept function (with args), parameter (0-arity expression), or anonymous plot (y = expr)
+    // Per spec: Functions can have formal arguments OR be 0-arity expressions
     if (parseResult.lhs?.kind === 'function' || parseResult.lhs?.kind === 'anonymous') {
-      // Valid: proceed
+      // Valid: f(x) = ... or y = ...
     } else if (parseResult.lhs?.kind === 'parameter') {
-      // User typed something like "f = sin(x)" without parentheses
-      setCreateError(
-        `Functions need parentheses. Did you mean ${parseResult.lhs.fullName}(x) = ... ?`
-      );
-      return;
+      // Valid as 0-arity function/expression: b = sin(x f(k))
+      // This is allowed in the Function panel per spec section 1
     } else {
-      setCreateError('Left-hand side must be a function (e.g., f(x), g(t)) or anonymous plot (y = ...)');
+      setCreateError('Left-hand side must be a single letter with optional subscript (e.g., f(x), b, γ_{3})');
       return;
     }
 
-    // Call parent
-    onFunctionCreate(normalized, newColor);
+    // Call parent - it may return a result object
+    const result = onFunctionCreate(normalized, newColor);
 
-    // Reset
+    // Check if result indicates failure
+    if (result && 'success' in result && !result.success) {
+      setCreateError(result.errors?.join(', ') || 'Failed to create function');
+      return;
+    }
+
+    // Reset form on success
     setNewFullExpression('');
     setNewColor(DEFAULT_COLORS[(functions.length + 1) % DEFAULT_COLORS.length]);
     setCreateError(null);

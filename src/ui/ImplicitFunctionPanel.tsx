@@ -31,12 +31,12 @@ export function ImplicitFunctionPanel({
   implicitFunctions,
   parameterValues,
   onFunctionCreate,
-  onFunctionUpdate,
+  // onFunctionUpdate, // Unused for now
   onFunctionDelete,
   onFunctionToggle,
 }: ImplicitFunctionPanelProps) {
   const [isCreating, setIsCreating] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  // const [editingId, setEditingId] = useState<string | null>(null); // Unused for now
 
   // Form state
   const [newExpression, setNewExpression] = useState('');
@@ -45,7 +45,7 @@ export function ImplicitFunctionPanel({
   const [newResolution, setNewResolution] = useState(50);
   const [createError, setCreateError] = useState<string | null>(null);
 
-  const expressionEngine = new ExpressionEngine();
+  // const expressionEngine = new ExpressionEngine(); // Unused for now
   const plotter = new ImplicitFunctionPlotter();
 
   const handleCreate = () => {

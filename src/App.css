@@ -59,6 +59,15 @@
   background: #3a8eef;
 }
 
+.header-button.docs-link {
+  background: #7c3aed;
+  text-decoration: none;
+}
+
+.header-button.docs-link:hover {
+  background: #6d28d9;
+}
+
 .import-message {
   padding: 1rem 2rem;
   text-align: center;

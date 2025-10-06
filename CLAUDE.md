@@ -43,9 +43,29 @@ A desktop/web application for exploring mathematical expressions as living, anim
 
 ## Reference Documents
 
+### In-App Documentation System
+
+This project uses an in-app documentation system (F46) located at `/public/docs/`. Access it at http://localhost:3000/docs or via the "📖 Docs" button in the app header.
+
+**Documentation Categories:**
+
+- **User Guide** (`/docs/user-guide/`) — How to use features
+  - Getting Started, Parameters, Functions, Timeline, Export
+- **Reference** (`/docs/reference/`) — Technical syntax and shortcuts
+  - Expression Syntax, Keyboard Shortcuts, Config System, File Formats
+- **Developer** (`/docs/developer/`) — Architecture and contributing
+  - Architecture Overview, Testing Guide, Contributing, API Reference
+- **Changelog** (`/docs/changelog/`) — Version history and roadmap
+  - v1.0.0 (MVP), v2.0.0 (P1+F20), Roadmap
+
+**Master Index**: `/docs/index.json` contains metadata for all documents including categories, titles, tags, and ordering.
+
+### Legacy Documents (Root Level)
+
 - `README.md` — Quick start, features, current status
-- `NEXT_LEVEL_ROADMAP.md` — Detailed roadmap for advanced features
-- `docs/archive/` — Historical progress documentation (18 files)
+- `docs/archive/` — Historical progress documentation (20+ files)
+
+**For AI Agents**: Always check `/docs/` first for current project knowledge. Use `docs/index.json` to discover available documentation.
 
 ## For the AI Agent: Decision Framework
 

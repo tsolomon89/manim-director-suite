@@ -3,8 +3,6 @@
  * Phase A: Manim Integration Foundation
  */
 
-import { createHash } from 'crypto';
-
 export interface CachedFrame {
   key: string;
   imagePath: string;

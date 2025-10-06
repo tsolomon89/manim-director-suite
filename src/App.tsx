@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { configManager } from './config/ConfigManager';
 import { DEFAULT_FUNCTION_STEP } from './constants';
 import { ParameterPanel } from './ui/ParameterPanel';
@@ -11,6 +12,7 @@ import { DesmosImportDialog } from './ui/DesmosImportDialog';
 import { SaveLoadDialog } from './ui/SaveLoadDialog';
 import { ExportDialog } from './ui/ExportDialog';
 import { ManimExportDialog } from './ui/ManimExportDialog';
+import { RendererToggle, type RendererType } from './ui/RendererToggle';
 import { Viewport } from './scene/Viewport';
 import { ValueControl } from './ui/ValueControl';
 import { Camera } from './scene/Camera';
@@ -64,6 +66,11 @@ function App() {
   const [showExportDialog, setShowExportDialog] = useState<'png' | 'manim' | null>(null);
   const viewportCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  // Renderer state
+  const [currentRenderer, setCurrentRenderer] = useState<RendererType>('canvas');
+  const [manimAvailable, setManimAvailable] = useState(false);
+  const [rendererStats, setRendererStats] = useState<{ latencyMs?: number; cacheStats?: any }>({});
+
   // Engine managers
   const parameterManagerRef = useRef<ParameterManager>(new ParameterManager());
   const expressionEngineRef = useRef<ExpressionEngine>(new ExpressionEngine());
@@ -99,6 +106,9 @@ function App() {
           setTimelineState(state);
         });
 
+        // Check Manim availability
+        checkManimAvailability();
+
         setIsConfigLoaded(true);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load configuration');
@@ -113,6 +123,24 @@ function App() {
       playbackControllerRef.current?.destroy();
     };
   }, []);
+
+  // Check if Manim backend service is available
+  const checkManimAvailability = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/manim/health');
+      const data = await response.json();
+      setManimAvailable(data.manimAvailable || false);
+
+      if (data.manimAvailable) {
+        console.log(`✅ Manim available: v${data.manimVersion}`);
+      } else {
+        console.warn('⚠️ Manim backend service running but Manim not installed');
+      }
+    } catch (error) {
+      console.warn('⚠️ Manim backend service not reachable (is server running on port 3001?)');
+      setManimAvailable(false);
+    }
+  };
 
   // Get current parameter values for function plotting (memoized)
   // If timeline is playing, interpolate values from keyframes
@@ -646,6 +674,9 @@ function App() {
           >
             🎬 Manim
           </button>
+          <Link to="/docs" className="header-button docs-link" title="View Documentation">
+            📖 Docs
+          </Link>
         </div>
       </header>
 
@@ -674,10 +705,19 @@ function App() {
             gridConfig={gridConfig}
             functions={plottedFunctions}
             parameterValues={parameterValues}
+            renderer={currentRenderer}
             onCameraChange={handleCameraChange}
             onCanvasReady={(canvas) => {
               viewportCanvasRef.current = canvas;
             }}
+            onRendererStatsUpdate={setRendererStats}
+          />
+          <RendererToggle
+            currentRenderer={currentRenderer}
+            onRendererChange={setCurrentRenderer}
+            manimAvailable={manimAvailable}
+            cacheStats={rendererStats.cacheStats}
+            latencyMs={rendererStats.latencyMs}
           />
         </main>
 

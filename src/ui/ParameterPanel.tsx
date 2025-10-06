@@ -39,6 +39,7 @@ export function ParameterPanel({
   const [collisionSuggestions, setCollisionSuggestions] = useState<string[]>([]);
   const [showGreekPicker, setShowGreekPicker] = useState(false);
   const [greekPickerTarget, setGreekPickerTarget] = useState<'name' | 'value'>('name');
+  const [showOperatorGuard, setShowOperatorGuard] = useState(false);
 
   // Create instances for validation
   const expressionEngine = new ExpressionEngine();
@@ -47,6 +48,7 @@ export function ParameterPanel({
   const handleCreate = () => {
     // Clear previous errors
     setCreateError(null);
+    setShowOperatorGuard(false);
 
     // Normalize inputs
     const normalizedName = expressionEngine.normalizeExpression(newName.trim());
@@ -97,6 +99,7 @@ export function ParameterPanel({
     const numericValidation = binder.validateNumericOnly(normalizedValue);
     if (numericValidation) {
       setCreateError(numericValidation);
+      setShowOperatorGuard(true);
       return;
     }
 
@@ -115,6 +118,7 @@ export function ParameterPanel({
     setNewValue('');
     setNewControlType('slider');
     setCreateError(null);
+    setShowOperatorGuard(false);
     setIsCreating(false);
   };
 
@@ -238,15 +242,23 @@ export function ParameterPanel({
           {createError && (
             <div className="create-error">
               ⚠️ {createError}
-              {createError.includes('operators') && onConvertToFunction && (
-                <button
-                  className="fix-it-button"
-                  onClick={() => {
-                    // Can't convert during creation, just show hint
-                  }}
-                >
-                  Use Function Panel instead →
-                </button>
+              {showOperatorGuard && (
+                <div className="operator-guard">
+                  <p className="guard-message">
+                    Parameters can only hold numeric values. Use the Function panel for expressions.
+                  </p>
+                  <button
+                    className="make-function-button"
+                    onClick={() => {
+                      // Switch to function panel (user will need to manually create)
+                      setIsCreating(false);
+                      setCreateError(null);
+                      setShowOperatorGuard(false);
+                    }}
+                  >
+                    Make this a Function →
+                  </button>
+                </div>
               )}
               {collisionSuggestions.length > 0 && (
                 <div className="collision-suggestions">

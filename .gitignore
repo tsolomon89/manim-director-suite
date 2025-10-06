@@ -46,3 +46,11 @@ desktop.ini
 *.pkstudio
 media/
 exports/
+desmos-text-io-main/
+videos-master/
+
+# Python virtual environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
