@@ -32,14 +32,19 @@ export interface ParameterMetadata {
 
 /**
  * Parameter: Numeric-only values (no expressions, no dependencies)
- * Per spec §6: "Parameters are numeric-only (scalars or lists) and never contain operators"
+ * Per spec: "Parameters are numeric-only and must have EITHER value OR bounds OR both"
+ *
+ * Three valid configurations:
+ * 1. value only: k = 5 (fixed scalar)
+ * 2. domain only: k ∈ [-10, 10] (range for sweep/animation, no current value)
+ * 3. value + domain: k = 5, k ∈ [-10, 10] (current value within allowed range)
  */
 export interface Parameter {
   id: string;
   name: string;
-  /** Direct numeric value - NO EXPRESSIONS ALLOWED */
-  value: number | number[];
-  /** Optional domain constraints (for sliders and independent variables) */
+  /** Direct numeric value - NO EXPRESSIONS ALLOWED. Optional if domain is specified. */
+  value?: number | number[];
+  /** Domain constraints (for sliders and independent variables). Optional if value is specified. */
   domain?: ParameterDomain;
   /** UI control configuration */
   uiControl?: UIControl;

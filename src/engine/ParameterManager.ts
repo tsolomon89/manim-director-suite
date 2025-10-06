@@ -21,14 +21,15 @@ export class ParameterManager {
 
   /**
    * Create a new parameter (numeric value only)
+   * Per spec: Must have EITHER value OR domain OR both
    * @param name - Parameter name (e.g., "Z", "k", "T")
-   * @param value - Numeric value (scalar or array)
+   * @param value - Optional numeric value (scalar or array). Required if domain not provided.
    * @param options - Optional domain, UI control, role, and metadata
    * @returns The created parameter or null if validation fails
    */
   createParameter(
     name: string,
-    value: number | number[],
+    value?: number | number[],
     options?: {
       domain?: ParameterDomain;
       uiControl?: UIControl;
@@ -49,11 +50,17 @@ export class ParameterManager {
       return null;
     }
 
+    // CRITICAL VALIDATION: Must have value OR domain (or both)
+    if (value === undefined && !options?.domain) {
+      console.error('Parameter must have either a value or a domain (or both)');
+      return null;
+    }
+
     // Get defaults from config (with fallback)
     const defaults = configManager.get('parameters.defaults') || { min: -10, max: 10, step: 0.1 };
 
-    // Validate domain if provided
-    if (typeof value === 'number' && options?.domain) {
+    // Validate domain if both value and domain provided
+    if (value !== undefined && typeof value === 'number' && options?.domain) {
       const domainValidation = this.expressionEngine.validateDomain(
         value,
         options.domain.min,
@@ -73,7 +80,7 @@ export class ParameterManager {
       value,
       domain: options?.domain,
       uiControl: options?.uiControl || {
-        type: 'number',
+        type: value !== undefined ? 'number' : 'domain-editor',
         min: defaults?.min ?? -10,
         max: defaults?.max ?? 10,
         step: defaults?.step ?? 0.1,

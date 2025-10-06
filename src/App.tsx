@@ -298,8 +298,20 @@ function App() {
       fullExpression,
       paramMap,
       (name: string) => {
-        // Auto-create parameter callback
-        return pm.createParameter(name, 0, {
+        // Auto-create parameter callback with BOTH value AND domain per spec
+        const defaults = configManager.get('parameters.defaults');
+        return pm.createParameter(name, 1, {
+          domain: {
+            min: defaults.min,
+            max: defaults.max,
+            step: defaults.step,
+          },
+          uiControl: {
+            type: 'slider',
+            min: defaults.min,
+            max: defaults.max,
+            step: defaults.step,
+          },
           metadata: { source: 'auto', created: new Date().toISOString() }
         })!;
       }
@@ -350,8 +362,20 @@ function App() {
       newExpression,
       paramMap,
       (name) => {
-        // Auto-create parameter callback
-        return pm.createParameter(name, 0, {
+        // Auto-create parameter callback with BOTH value AND domain per spec
+        const defaults = configManager.get('parameters.defaults');
+        return pm.createParameter(name, 1, {
+          domain: {
+            min: defaults.min,
+            max: defaults.max,
+            step: defaults.step,
+          },
+          uiControl: {
+            type: 'slider',
+            min: defaults.min,
+            max: defaults.max,
+            step: defaults.step,
+          },
           metadata: { source: 'auto', created: new Date().toISOString() }
         })!;
       }
