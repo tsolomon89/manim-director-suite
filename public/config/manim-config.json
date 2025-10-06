@@ -1,0 +1,48 @@
+{
+  "$schema": "../../src/config/schemas/manim-config.schema.json",
+  "manim": {
+    "executablePath": "manim",
+    "tempDir": "./temp/manim",
+    "cleanupTempFiles": true,
+    "qualityPresets": {
+      "draft": {
+        "flag": "-ql",
+        "resolution": "480p",
+        "description": "Low quality for fast preview"
+      },
+      "medium": {
+        "flag": "-qm",
+        "resolution": "720p",
+        "description": "Medium quality for testing"
+      },
+      "high": {
+        "flag": "-qh",
+        "resolution": "1080p",
+        "description": "High quality for final export"
+      },
+      "4k": {
+        "flag": "-qk",
+        "resolution": "2160p",
+        "description": "4K quality for production"
+      }
+    },
+    "frameFormat": "png",
+    "outputDir": "./media",
+    "timeout": 30000
+  },
+  "viewport": {
+    "renderer": "canvas",
+    "manimPreviewQuality": "draft",
+    "manimCacheSizeFrames": 100,
+    "manimPreviewLatencyMs": 200,
+    "hybridIdleTimeMs": 500,
+    "showRendererIndicator": true
+  },
+  "cache": {
+    "enabled": true,
+    "maxSizeFrames": 100,
+    "maxSizeMB": 500,
+    "evictionPolicy": "lru",
+    "persistToDisk": false
+  }
+}

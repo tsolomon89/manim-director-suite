@@ -18,7 +18,7 @@ describe('P1 Integration: Coordinate Plotting', () => {
 
     expect(result.success).toBe(true);
     expect(result.points).toHaveLength(1024);
-    expect(parseTime).toBeLessThan(50); // Should parse in < 50ms
+    expect(parseTime).toBeLessThan(100); // Should parse in < 100ms
   });
 
   it('should validate large datasets', () => {

@@ -5,6 +5,8 @@
   "recentProjects": [],
   "viewport": {
     "renderMode": "high",
-    "showFps": true
+    "showFps": true,
+    "renderer": "canvas",
+    "showRendererIndicator": true
   }
 }
