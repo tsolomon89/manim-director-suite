@@ -4,10 +4,12 @@ import { Space } from './Space';
 import { Grid } from './Grid';
 import { FunctionPlotter } from './FunctionPlotter';
 import { PointPlotter } from './PointPlotter';
+import { ImplicitFunctionPlotter } from './ImplicitFunctionPlotter';
 import { configManager } from '../config/ConfigManager';
 import type { ViewportDimensions } from './types';
 import type { PlottedFunction } from './FunctionPlotter';
 import type { PlottedPoints } from './PointPlotter';
+import type { ImplicitFunction } from './implicit-types';
 import type { GridRenderConfig } from './GridConfig';
 import './Viewport.css';
 
@@ -18,18 +20,20 @@ interface ViewportProps {
   gridConfig?: GridRenderConfig;
   functions?: PlottedFunction[];
   points?: PlottedPoints[];
+  implicitFunctions?: ImplicitFunction[];
   parameterValues?: Record<string, number>;
   onCameraChange?: (camera: Camera) => void;
   onCanvasReady?: (canvas: HTMLCanvasElement) => void;
 }
 
-export function Viewport({ gridStyleId, gridConfig, functions = [], points = [], parameterValues = {}, onCameraChange, onCanvasReady }: ViewportProps) {
+export function Viewport({ gridStyleId, gridConfig, functions = [], points = [], implicitFunctions = [], parameterValues = {}, onCameraChange, onCanvasReady }: ViewportProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera>(new Camera());
   const spaceRef = useRef<Space>(new Space());
   const gridRef = useRef<Grid>(new Grid(spaceRef.current));
   const plotterRef = useRef<FunctionPlotter>(new FunctionPlotter());
   const pointPlotterRef = useRef<PointPlotter>(new PointPlotter());
+  const implicitPlotterRef = useRef<ImplicitFunctionPlotter>(new ImplicitFunctionPlotter(spaceRef.current));
   const animationFrameRef = useRef<number | undefined>(undefined);
 
   const [fps, setFps] = useState(0);
@@ -107,6 +111,19 @@ export function Viewport({ gridStyleId, gridConfig, functions = [], points = [],
       );
     });
 
+    // Render implicit functions
+    const implicitPlotter = implicitPlotterRef.current;
+    implicitFunctions.forEach((implFunc) => {
+      implicitPlotter.plotImplicitFunction(
+        implFunc,
+        parameterValues,
+        ctx,
+        camera.getState(),
+        viewport,
+        { smoothCurve: true }
+      );
+    });
+
     // Update FPS counter
     const now = performance.now();
     fpsCounterRef.current.frames++;
@@ -116,7 +133,7 @@ export function Viewport({ gridStyleId, gridConfig, functions = [], points = [],
       fpsCounterRef.current.lastUpdate = now;
     }
     lastFrameTimeRef.current = now;
-  }, [functions, points, parameterValues, gridConfig]);
+  }, [functions, points, implicitFunctions, parameterValues, gridConfig]);
 
   // Animation loop
   useEffect(() => {
