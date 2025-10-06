@@ -150,6 +150,7 @@ export interface MathInputProps {
   value: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
   autoFocus?: boolean;
@@ -160,6 +161,7 @@ export function MathInput({
   value,
   onChange,
   onBlur,
+  onKeyDown,
   placeholder,
   className,
   autoFocus,
@@ -178,6 +180,7 @@ export function MathInput({
           setIsFocused(false);
           onBlur?.();
         }}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         autoFocus={autoFocus}
         className="math-input"

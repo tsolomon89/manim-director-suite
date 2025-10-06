@@ -297,6 +297,16 @@ export function FunctionPanelNew({
                       className="expression-input"
                       autoFocus
                       showPreview={true}
+                      onBlur={() => handleSaveEdit(func.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleSaveEdit(func.id);
+                        } else if (e.key === 'Escape') {
+                          e.preventDefault();
+                          handleCancelEdit();
+                        }
+                      }}
                     />
                     <div className="expression-edit-actions">
                       <button onClick={() => handleSaveEdit(func.id)} className="save-button">

@@ -219,6 +219,13 @@ export function ParameterPanel({
               placeholder="Value (numeric only, e.g., 710, 3.14)"
               className="param-value-input"
               showPreview={true}
+              onBlur={handleCreate}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleCreate();
+                }
+              }}
             />
             <button
               className="greek-picker-button"
@@ -366,7 +373,16 @@ export function ParameterPanel({
                   <MathInput
                     value={editValue}
                     onChange={setEditValue}
-                    onBlur={() => {}}
+                    onBlur={() => handleSaveEdit(param.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleSaveEdit(param.id);
+                      } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        handleCancelEdit();
+                      }
+                    }}
                     className="value-input"
                     autoFocus
                     showPreview={false}
