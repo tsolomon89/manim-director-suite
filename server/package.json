@@ -1,0 +1,17 @@
+{
+  "name": "manim-service",
+  "version": "1.0.0",
+  "description": "Backend service for Manim rendering",
+  "main": "manim-service.js",
+  "scripts": {
+    "start": "node manim-service.js",
+    "dev": "nodemon manim-service.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

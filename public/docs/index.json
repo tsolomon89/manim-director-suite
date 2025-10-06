@@ -129,6 +129,30 @@
           "description": "Core APIs and TypeScript interfaces",
           "tags": ["api", "typescript", "reference"],
           "order": 4
+        },
+        {
+          "id": "backend-setup",
+          "title": "Backend Setup",
+          "file": "developer/BACKEND_SETUP.md",
+          "description": "Setting up the backend/Manim integration",
+          "tags": ["setup", "backend", "manim"],
+          "order": 5
+        },
+        {
+          "id": "github-setup",
+          "title": "GitHub Setup",
+          "file": "developer/GITHUB_SETUP.md",
+          "description": "Git and GitHub configuration",
+          "tags": ["git", "github", "setup"],
+          "order": 6
+        },
+        {
+          "id": "manim-renderer",
+          "title": "Manim Renderer Implementation",
+          "file": "developer/MANIM_RENDERER_IMPLEMENTATION.md",
+          "description": "Manim integration technical details",
+          "tags": ["manim", "renderer", "implementation"],
+          "order": 7
         }
       ]
     },
@@ -161,6 +185,80 @@
           "file": "changelog/roadmap.md",
           "description": "Future features and development plans",
           "tags": ["roadmap", "future", "features"],
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "title": "Planning",
+      "description": "Project planning and proposals (AI/dev reference)",
+      "icon": "📋",
+      "order": 5,
+      "documents": [
+        {
+          "id": "execution-plan",
+          "title": "Execution Plan",
+          "file": "planning/EXECUTION_PLAN.md",
+          "description": "Detailed implementation plan for v2.0 features",
+          "tags": ["planning", "implementation", "roadmap"],
+          "order": 1
+        },
+        {
+          "id": "feature-proposals",
+          "title": "Feature Proposals",
+          "file": "planning/FEATURE_PROPOSALS.md",
+          "description": "All proposed features with priorities",
+          "tags": ["features", "proposals", "backlog"],
+          "order": 2
+        },
+        {
+          "id": "implementation-roadmap",
+          "title": "Implementation Roadmap",
+          "file": "planning/IMPLEMENTATION_ROADMAP.md",
+          "description": "High-level implementation roadmap",
+          "tags": ["roadmap", "planning"],
+          "order": 3
+        },
+        {
+          "id": "alt-idea",
+          "title": "Alternative Ideas",
+          "file": "planning/alt_idea.md",
+          "description": "Alternative approaches and experiments",
+          "tags": ["ideas", "experiments"],
+          "order": 4
+        }
+      ]
+    },
+    {
+      "id": "archive",
+      "title": "Archive",
+      "description": "Historical documentation and session logs",
+      "icon": "📦",
+      "order": 6,
+      "documents": [
+        {
+          "id": "comprehensive-review",
+          "title": "Comprehensive Review",
+          "file": "archive/COMPREHENSIVE_REVIEW.md",
+          "description": "Complete project review",
+          "tags": ["review", "history"],
+          "order": 1
+        },
+        {
+          "id": "mvp-complete",
+          "title": "MVP Complete Report",
+          "file": "archive/MVP_COMPLETE.md",
+          "description": "MVP completion summary",
+          "tags": ["mvp", "completion"],
+          "order": 2
+        },
+        {
+          "id": "phase-b-complete",
+          "title": "Phase B Complete",
+          "file": "archive/PHASE_B_COMPLETE.md",
+          "description": "Phase B completion notes",
+          "tags": ["phase-b", "history"],
           "order": 3
         }
       ]

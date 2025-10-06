@@ -167,6 +167,13 @@ export function FunctionPanelNew({
               autoFocus
               showPreview={true}
               className="full-expression-input"
+              onBlur={handleCreate}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleCreate();
+                }
+              }}
             />
             <button
               className="greek-picker-button"

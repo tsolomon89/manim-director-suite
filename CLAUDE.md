@@ -1,39 +1,22 @@
-# Parametric Keyframe Studio
+# Parametric Keyframe Studio - AI Development Guide
 
-## 🎯 Current Status: Phases 1-4 Complete → Starting Phase 5
+> **🚨 IMPORTANT: All project documentation now lives in `/public/docs/` 🚨**
+>
+> This file provides **development guidelines and coding principles** for AI agents.
+>
+> For project knowledge, features, and architecture, see:
+> - **In-app**: http://localhost:3000/docs (when running)
+> - **Files**: `/public/docs/` directory
+> - **Index**: `/public/docs/index.json` (master catalog)
+> - **AI Instructions**: `AGENTS.md` (knowledge base guide)
 
-**Phase 1 (Configuration System)**: ✅ **COMPLETE**
-- ConfigManager with 22+ config files operational
-- Settings UI with live preset switching
-- Full TypeScript type coverage
-- Demo running at http://localhost:3000
+## 🎯 Current Status: v2.0.0
 
-**Phase 2 (Scene & Rendering)**: ✅ **COMPLETE**
-- 2D canvas viewport with grid rendering
-- Camera controls (pan/zoom) working
-- GridStyleConfig applied to visual output
-- 60 FPS real-time performance
+- ✅ **v1.0.0 (MVP)**: All 8 phases complete
+- ✅ **v2.0.0**: P1 (Coordinate Plotting) + F20 (Implicit Functions) + F46 (Docs System)
+- 🚧 **Next**: Phase 1 remaining (F4, P7, Q2, P12)
 
-**Phase 3 (Parameters & Expressions)**: ✅ **COMPLETE**
-- Numeric-only parameters (spec-compliant)
-- Expression evaluation via math.js
-- Dependency resolution system
-- Parameter UI with role badges
-
-**Phase 4 (Function Plotting & Expression UX)**: ✅ **COMPLETE**
-- Real-time function plotting
-- Greek symbol support (full alphabet)
-- Implicit multiplication (`2x` → `2*x`)
-- Anonymous plots (`y = expr`)
-- Auto-parameterization
-- Collision detection with suggestions
-- 100% Expression UX spec compliance
-
-**Phase 5 (Keyframes & Timeline)**: 🚧 **NEXT** - Ready to begin
-- Timeline UI with scrubber
-- Keyframe creation/editing
-- Tweening engine with easing curves
-- Play/pause/scrub controls
+📖 **Full details**: `/public/docs/changelog/`
 
 ## Project Overview
 

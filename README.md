@@ -74,21 +74,23 @@ Visit http://localhost:3000
 
 ### 🚀 Future Enhancements
 - 3D scene support (volumetric grid, orbit camera)
-- Complex number visualization
-- List-based plotting (`sin(n*f)` for `n=[0...Z-1]`)
-- Advanced warps (conformal mappings)
-- Unit testing & CI/CD
+- Complex number visualization (F4)
+- Multi-value function handling (P7)
+- Advanced coloring system (Q2)
+- Gradient/color mapping (P12)
 
-See [NEXT_LEVEL_ROADMAP.md](NEXT_LEVEL_ROADMAP.md) for advanced features.
+See `/docs/changelog/roadmap.md` (in-app) for full roadmap.
 
-## Architecture
+## Documentation
 
-- **Zero hard-coded values** - All in JSON config
-- **DRY always** - Reusable components
-- **Type-safe** - 50+ TypeScript interfaces
-- **60 FPS target** - Performance-first
+📖 **Full documentation available in-app**: Click the "Docs" button or visit `/docs` route
 
-See [CLAUDE.md](CLAUDE.md) for complete specification.
+- **User Guide**: Getting started, parameters, functions, timeline, export
+- **Reference**: Expression syntax, keyboard shortcuts, config system
+- **Developer**: Architecture, testing, contributing, API reference
+- **Changelog**: Version history and roadmap
+
+See [AGENTS.md](AGENTS.md) for AI agent instructions and [CLAUDE.md](CLAUDE.md) for development guidelines.
 
 ## Examples
 
