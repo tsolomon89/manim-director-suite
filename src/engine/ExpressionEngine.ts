@@ -9,6 +9,7 @@ import { configManager } from '../config/ConfigManager';
 import { symbolRegistry } from './SymbolRegistry';
 import type { ExpressionResult, ValidationResult } from './types';
 import type { ParsedLHS, ParseResult, LHSValidationResult } from './expression-types';
+import type { CoordinateResult, ListOrValue } from './coordinate-types';
 
 export class ExpressionEngine {
   private math: MathJsInstance;
@@ -648,5 +649,251 @@ export class ExpressionEngine {
     }
 
     return false;
+  }
+
+  /**
+   * Match tuple parts handling nested brackets correctly
+   * Example: "([0,1,2], [3,4,5])" → ["[0,1,2]", "[3,4,5]"]
+   */
+  private matchTupleParts(expression: string): [string, string] | null {
+    const trimmed = expression.trim();
+
+    // Must start with ( and end with )
+    if (!trimmed.startsWith('(') || !trimmed.endsWith(')')) {
+      return null;
+    }
+
+    // Remove outer parens
+    const inner = trimmed.slice(1, -1);
+
+    // Find the comma that separates x and y (not inside brackets)
+    let depth = 0;
+    let commaIndex = -1;
+
+    for (let i = 0; i < inner.length; i++) {
+      const char = inner[i];
+      if (char === '[') depth++;
+      else if (char === ']') depth--;
+      else if (char === ',' && depth === 0) {
+        commaIndex = i;
+        break;
+      }
+    }
+
+    if (commaIndex === -1) {
+      return null; // No comma found at depth 0
+    }
+
+    const xExpr = inner.slice(0, commaIndex).trim();
+    const yExpr = inner.slice(commaIndex + 1).trim();
+
+    return [xExpr, yExpr];
+  }
+
+  /**
+   * Parse coordinate expression: (x, y) where x and y can be:
+   * - Single values: (0, 5)
+   * - List ranges: ([0..10], 5)
+   * - Explicit lists: ([0,1,2], [3,4,5])
+   * @param expression - Coordinate expression
+   * @param parameters - Current parameter values for evaluation
+   * @returns Array of {x, y} points
+   */
+  parseCoordinates(expression: string, parameters: Record<string, number> = {}): CoordinateResult {
+    try {
+      // Normalize expression
+      const normalized = this.normalizeExpression(expression);
+
+      // Match tuple pattern: (expr1, expr2) - must handle nested brackets
+      const tupleMatch = this.matchTupleParts(normalized);
+      if (!tupleMatch) {
+        return {
+          success: false,
+          error: 'Expression must be a tuple: (x, y)',
+        };
+      }
+
+      const [xExpr, yExpr] = tupleMatch;
+
+      // Parse x and y components
+      const xParsed = this.parseListOrValue(xExpr.trim(), parameters);
+      const yParsed = this.parseListOrValue(yExpr.trim(), parameters);
+
+      if (!xParsed.success || !yParsed.success) {
+        return {
+          success: false,
+          error: xParsed.error || yParsed.error,
+        };
+      }
+
+      // Expand to points
+      const points = this.expandToPoints(xParsed.value!, yParsed.value!);
+
+      return {
+        success: true,
+        points,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown coordinate parsing error',
+      };
+    }
+  }
+
+  /**
+   * Parse a list or single value
+   * - Single: 5 → { type: 'single', value: 5 }
+   * - Range: [0..10] → { type: 'range', start: 0, end: 10 }
+   * - Explicit: [0,1,2] → { type: 'explicit', values: [0,1,2] }
+   */
+  private parseListOrValue(expr: string, parameters: Record<string, number>): {
+    success: boolean;
+    value?: ListOrValue;
+    error?: string;
+  } {
+    // Check for list syntax: [...]
+    const listMatch = expr.match(/^\s*\[\s*(.+?)\s*\]\s*$/);
+
+    if (listMatch) {
+      const innerExpr = listMatch[1];
+
+      // Check for range syntax: start..end or start..end..step
+      const rangeMatch = innerExpr.match(/^(.+?)\.\.(.+?)(?:\.\.(.+?))?$/);
+
+      if (rangeMatch) {
+        const [, startExpr, endExpr, stepExpr] = rangeMatch;
+
+        // Evaluate start and end
+        const startResult = this.evaluate(startExpr.trim(), parameters);
+        const endResult = this.evaluate(endExpr.trim(), parameters);
+
+        if (!startResult.success || !endResult.success) {
+          return {
+            success: false,
+            error: `Invalid range: ${startResult.error || endResult.error}`,
+          };
+        }
+
+        const start = startResult.value!;
+        const end = endResult.value!;
+        let step = 1;
+
+        if (stepExpr) {
+          const stepResult = this.evaluate(stepExpr.trim(), parameters);
+          if (!stepResult.success) {
+            return { success: false, error: `Invalid step: ${stepResult.error}` };
+          }
+          step = stepResult.value!;
+        }
+
+        return {
+          success: true,
+          value: { type: 'range', start, end, step },
+        };
+      } else {
+        // Explicit list: [a, b, c]
+        const items = innerExpr.split(',').map(s => s.trim());
+        const values: number[] = [];
+
+        for (const item of items) {
+          const result = this.evaluate(item, parameters);
+          if (!result.success) {
+            return { success: false, error: `Invalid list item: ${result.error}` };
+          }
+          values.push(result.value!);
+        }
+
+        return {
+          success: true,
+          value: { type: 'explicit', values },
+        };
+      }
+    } else {
+      // Single value
+      const result = this.evaluate(expr, parameters);
+      if (!result.success) {
+        return { success: false, error: result.error };
+      }
+
+      return {
+        success: true,
+        value: { type: 'single', value: result.value! },
+      };
+    }
+  }
+
+  /**
+   * Expand x and y list/values to coordinate points
+   * Rules:
+   * - (single, single) → 1 point
+   * - (list, single) → broadcast single to all list values
+   * - (single, list) → broadcast single to all list values
+   * - (list, list) → Cartesian product (all combinations)
+   *
+   * Examples:
+   * - (5, 10) → [{x:5, y:10}]
+   * - ([0,1,2], 5) → [{x:0,y:5}, {x:1,y:5}, {x:2,y:5}]
+   * - ([0..2], [0..2]) → 9 points (Cartesian product)
+   */
+  private expandToPoints(x: ListOrValue, y: ListOrValue): Array<{ x: number; y: number }> {
+    const xValues = this.expandToArray(x);
+    const yValues = this.expandToArray(y);
+
+    // If one is single and other is array: broadcast the single value
+    if (xValues.length === 1 && yValues.length > 1) {
+      return yValues.map(yVal => ({ x: xValues[0], y: yVal }));
+    }
+
+    if (yValues.length === 1 && xValues.length > 1) {
+      return xValues.map(xVal => ({ x: xVal, y: yValues[0] }));
+    }
+
+    // If both are single values: single point
+    if (xValues.length === 1 && yValues.length === 1) {
+      return [{ x: xValues[0], y: yValues[0] }];
+    }
+
+    // Both are lists (even if same length): create Cartesian product (grid)
+    const points: Array<{ x: number; y: number }> = [];
+    for (const xVal of xValues) {
+      for (const yVal of yValues) {
+        points.push({ x: xVal, y: yVal });
+      }
+    }
+    return points;
+  }
+
+  /**
+   * Expand ListOrValue to array of numbers
+   */
+  private expandToArray(item: ListOrValue): number[] {
+    switch (item.type) {
+      case 'single':
+        return [item.value];
+
+      case 'explicit':
+        return item.values;
+
+      case 'range': {
+        const { start, end, step = 1 } = item;
+        const values: number[] = [];
+
+        if (step > 0) {
+          for (let i = start; i <= end; i += step) {
+            values.push(i);
+          }
+        } else if (step < 0) {
+          for (let i = start; i >= end; i += step) {
+            values.push(i);
+          }
+        } else {
+          // step === 0, just return start
+          values.push(start);
+        }
+
+        return values;
+      }
+    }
   }
 }

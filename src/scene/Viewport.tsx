@@ -3,9 +3,11 @@ import { Camera } from './Camera';
 import { Space } from './Space';
 import { Grid } from './Grid';
 import { FunctionPlotter } from './FunctionPlotter';
+import { PointPlotter } from './PointPlotter';
 import { configManager } from '../config/ConfigManager';
 import type { ViewportDimensions } from './types';
 import type { PlottedFunction } from './FunctionPlotter';
+import type { PlottedPoints } from './PointPlotter';
 import type { GridRenderConfig } from './GridConfig';
 import './Viewport.css';
 
@@ -15,17 +17,19 @@ interface ViewportProps {
   gridStyleId?: string;
   gridConfig?: GridRenderConfig;
   functions?: PlottedFunction[];
+  points?: PlottedPoints[];
   parameterValues?: Record<string, number>;
   onCameraChange?: (camera: Camera) => void;
   onCanvasReady?: (canvas: HTMLCanvasElement) => void;
 }
 
-export function Viewport({ gridStyleId, gridConfig, functions = [], parameterValues = {}, onCameraChange, onCanvasReady }: ViewportProps) {
+export function Viewport({ gridStyleId, gridConfig, functions = [], points = [], parameterValues = {}, onCameraChange, onCanvasReady }: ViewportProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera>(new Camera());
   const spaceRef = useRef<Space>(new Space());
   const gridRef = useRef<Grid>(new Grid(spaceRef.current));
   const plotterRef = useRef<FunctionPlotter>(new FunctionPlotter());
+  const pointPlotterRef = useRef<PointPlotter>(new PointPlotter());
   const animationFrameRef = useRef<number | undefined>(undefined);
 
   const [fps, setFps] = useState(0);
@@ -90,6 +94,19 @@ export function Viewport({ gridStyleId, gridConfig, functions = [], parameterVal
       );
     });
 
+    // Render points
+    const pointPlotter = pointPlotterRef.current;
+    points.forEach((pts) => {
+      pointPlotter.plotPoints(
+        pts,
+        parameterValues,
+        ctx,
+        camera.getState(),
+        viewport,
+        { fillPoints: true }
+      );
+    });
+
     // Update FPS counter
     const now = performance.now();
     fpsCounterRef.current.frames++;
@@ -99,7 +116,7 @@ export function Viewport({ gridStyleId, gridConfig, functions = [], parameterVal
       fpsCounterRef.current.lastUpdate = now;
     }
     lastFrameTimeRef.current = now;
-  }, [functions, parameterValues, gridConfig]);
+  }, [functions, points, parameterValues, gridConfig]);
 
   // Animation loop
   useEffect(() => {
