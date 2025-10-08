@@ -33,43 +33,69 @@ npm install
 
 ## Quick Start
 
-### Terminal 1: Start Backend Service
+### Option 1: Single Command (Recommended) ⭐
+
+Start both frontend and backend with one command:
 
 ```bash
-cd server
-npm start
+npm run dev:full
 ```
 
-You should see:
+You should see color-coded output:
 ```
-╔════════════════════════════════════════════════════════════╗
-║  🎬 Manim Rendering Service                                ║
-║  Status: Running                                           ║
-║  Port: 3001                                                ║
-╚════════════════════════════════════════════════════════════╝
-✅ Manim detected: v0.18.0
+[web] VITE v5.4.20  ready in 1245 ms
+[web] ➜  Local:   http://localhost:5000/
+[api] ╔════════════════════════════════════════════════════════════╗
+[api] ║  🎬 Manim Rendering Service                                ║
+[api] ║  Status: Running                                           ║
+[api] ║  Port: 5001                                                ║
+[api] ╚════════════════════════════════════════════════════════════╝
+[api] ✅ Manim detected: v0.18.0
 ```
 
-### Terminal 2: Start Frontend
+**Benefits**:
+- ✅ One terminal instead of two
+- ✅ Color-coded output (cyan = frontend, magenta = backend)
+- ✅ Ctrl+C kills both processes
 
+### Option 2: Separate Terminals
+
+**Terminal 1 - Backend**:
+```bash
+npm run server
+# Or: cd server && npm start
+```
+
+**Terminal 2 - Frontend**:
 ```bash
 npm run dev
 ```
 
 The frontend will automatically detect the backend service and enable Manim rendering.
 
-## Using the Manim Renderer
+## Using the Manim Features
 
-1. **Open the app** at http://localhost:3000
+### 1. Video Export (Primary Use)
 
-2. **Check renderer status** - Look for the renderer indicator in the top-right corner
+1. **Open the app** at http://localhost:5000
+2. **Create an animation** (add parameters and keyframes)
+3. **Click "🎬 Manim"** button in header
+4. **Configure settings**:
+   - Resolution: 720p, 1080p, 1440p, 4K
+   - Frame Rate: 24, 30, 60 fps
+   - Quality: Draft, Medium, High
+5. **Click "🎬 Render Video"**
+6. **Watch progress bar** (30-60s typical)
+7. **MP4 auto-downloads** when complete!
 
-3. **Switch to Manim mode**:
+### 2. Manim Renderer Mode (Viewport Preview)
+
+1. **Check renderer status** - Look for the renderer indicator in the top-right corner
+2. **Switch to Manim mode**:
    - Click the renderer indicator
    - Select "Manim Renderer"
    - The indicator should show green (✅ Ready)
-
-4. **Test rendering**:
+3. **Test rendering**:
    - Add a function (e.g., `y = sin(x)`)
    - The viewport should render using Manim
    - You'll see "Rendering with Manim..." while it processes
@@ -123,7 +149,7 @@ MANIM_PATH=/usr/local/bin/manim npm start
 
 **Check if backend is running**:
 ```bash
-curl http://localhost:3001/api/manim/health
+curl http://localhost:5001/api/manim/health
 ```
 
 Should return:

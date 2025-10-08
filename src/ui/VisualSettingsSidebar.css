@@ -1,0 +1,155 @@
+.visual-settings-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.visual-settings-tabs {
+  display: flex;
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #444;
+}
+
+.visual-settings-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+}
+
+.visual-settings-tab:hover {
+  background-color: #333;
+  color: #e8e8e8;
+}
+
+.visual-settings-tab.active {
+  color: #4a90e2;
+  border-bottom-color: #4a90e2;
+  background-color: #252525;
+}
+
+.visual-settings-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.visual-settings-section {
+  padding: 0;
+}
+
+/* Reuse existing control styles from App.css */
+.visual-settings-section .control-group {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+}
+
+.visual-settings-section .camera-controls {
+  padding: 1rem;
+}
+
+.visual-settings-section .camera-controls h4 {
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  color: #F5A623;
+}
+
+.visual-settings-section .reset-button {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.visual-settings-section .reset-button:hover {
+  background-color: #357ABD;
+}
+
+.visual-settings-section .reset-button:active {
+  background-color: #2D6BA8;
+}
+
+/* Renderer controls */
+.visual-settings-section .renderer-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.visual-settings-section .renderer-radio-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.visual-settings-section .renderer-radio-label:hover:not(.disabled) {
+  background-color: #353535;
+  border-color: #4A90E2;
+}
+
+.visual-settings-section .renderer-radio-label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.visual-settings-section .renderer-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.visual-settings-section .renderer-option-title {
+  color: #e8e8e8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.visual-settings-section .renderer-option-description {
+  color: #999;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.visual-settings-section .renderer-stats {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #ccc;
+}
+
+.visual-settings-section .renderer-stats small {
+  color: #F5A623;
+  font-family: monospace;
+}
+
+.visual-settings-section .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: #e8e8e8;
+}
+
+.visual-settings-section .checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}

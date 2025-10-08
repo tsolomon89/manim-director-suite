@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "errors": {
+    "E_CONST_REBIND": "Cannot assign to constant: ${name}. Try using ${name}_approx instead.",
+    "E_PARAM_NUMERIC_REQUIRED": "Parameter must have a numeric value or bounds (min/max).",
+    "E_PARAM_NEEDS_VALUE_OR_DOMAIN": "Provide a numeric value or domain (min/max) or both.",
+    "E_LIST_LENGTH": "List length ${len} exceeds limit ${max}.",
+    "E_NONNEG_INT_REQUIRED": "${name} must be a non-negative integer for range syntax [0...${name}].",
+    "E_NAME_COLLISION": "Name '${name}' already exists. Choose another name or use a subscript.",
+    "E_LHS_INVALID": "LHS must be a single letter (Latin/Greek) with optional subscript (e.g., k, γ, x_{gain}).",
+    "E_RANGE_SYNTAX": "Range syntax must be [start...end] or [start...end...step].",
+    "E_INVALID_EXPRESSION": "Expression contains invalid syntax.",
+    "E_UNDEFINED_SYMBOL": "Undefined symbol: ${name}. Define it as a parameter or function first.",
+    "E_ARITY_MISMATCH": "Function ${name} expects ${expected} argument(s) but ${actual} provided.",
+    "E_VALUE_OUT_OF_DOMAIN": "Value ${value} is outside allowed domain [${min}, ${max}]."
+  },
+  "warnings": {
+    "W_IMPLICIT_MULT": "Interpreting adjacent symbols as multiplication.",
+    "W_BARE_TOKEN_SUPPRESSED": "Bare token mapping suppressed inside LHS base name to avoid accidental rename.",
+    "W_COMPLEX_MODE_OFF": "Complex number operations require complex mode to be enabled.",
+    "W_LARGE_LIST": "List has ${count} elements. Consider using a smaller range for better performance.",
+    "W_SINGULARITY": "Expression may contain singularity (division by zero, log(0), etc.)."
+  }
+}

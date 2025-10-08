@@ -758,8 +758,9 @@ export class ExpressionEngine {
     if (listMatch) {
       const innerExpr = listMatch[1];
 
-      // Check for range syntax: start..end or start..end..step
-      const rangeMatch = innerExpr.match(/^(.+?)\.\.(.+?)(?:\.\.(.+?))?$/);
+      // Check for range syntax: start...end or start..end (both supported)
+      // Also supports optional step: start...end...step or start..end..step
+      const rangeMatch = innerExpr.match(/^(.+?)\.\.\.?(.+?)(?:\.\.\.?(.+?))?$/);
 
       if (rangeMatch) {
         const [, startExpr, endExpr, stepExpr] = rangeMatch;

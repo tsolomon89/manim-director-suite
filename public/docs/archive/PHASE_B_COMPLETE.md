@@ -57,17 +57,17 @@ Successfully implemented the backend service infrastructure for Manim rendering,
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Frontend (React)                                        │
-│  http://localhost:3000                                   │
+│  http://localhost:5000                                   │
 │                                                          │
 │  1. User switches to Manim mode                         │
 │  2. ManimRenderer generates Python script               │
-│  3. POST to http://localhost:3001/api/manim/render      │
+│  3. POST to http://localhost:5001/api/manim/render      │
 └────────────────────┬────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────┐
 │  Backend Service (Express)                               │
-│  http://localhost:3001                                   │
+│  http://localhost:5001                                   │
 │                                                          │
 │  1. Receive script in request body                      │
 │  2. Write to temp file: temp/manim/script_<id>.py       │
@@ -228,7 +228,7 @@ Content-Type: application/json
 1. **Manim Must Be Installed**: Service will start but rendering fails without Manim
 2. **Single Render Queue**: Only one render at a time (prevents overload)
 3. **No Persistent Cache**: Frame cache is in-memory only (cleared on restart)
-4. **Fixed Endpoint**: Hardcoded to `localhost:3001` (configurable via env)
+4. **Fixed Endpoint**: Hardcoded to `localhost:5001` (configurable via env)
 
 ### Future Enhancements
 
@@ -335,7 +335,7 @@ With default settings (100 frame cache):
    ```
 
 3. **Test rendering**:
-   - Open http://localhost:3000
+   - Open http://localhost:5000
    - Switch to Manim mode (top-right toggle)
    - Add a function: `y = sin(x)`
    - Watch for "Rendering with Manim..." indicator

@@ -30,6 +30,12 @@
     "outputDir": "./media",
     "timeout": 30000
   },
+  "export": {
+    "videoEndpoint": "http://localhost:5001",
+    "progressUpdateIntervalMs": 1000,
+    "timeoutSeconds": 300,
+    "maxVideoSizeMB": 50
+  },
   "viewport": {
     "renderer": "canvas",
     "manimPreviewQuality": "draft",

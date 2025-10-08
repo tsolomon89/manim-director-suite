@@ -2,9 +2,12 @@
  * Type definitions for the Expression Engine and Parameter System
  *
  * SPEC-COMPLIANT: Parameters are numeric-only, no expressions
+ * EXTENDED: Now supports complex numbers for fractal rendering
  */
 
-export type UIControlType = 'slider' | 'number' | 'stepper' | 'domain-editor';
+import type { ComplexNumber } from './complex-types';
+
+export type UIControlType = 'slider' | 'number' | 'stepper' | 'domain-editor' | 'complex';
 
 export type ParameterRole = 'independent' | 'slider' | 'constant-approx';
 
@@ -34,16 +37,19 @@ export interface ParameterMetadata {
  * Parameter: Numeric-only values (no expressions, no dependencies)
  * Per spec: "Parameters are numeric-only and must have EITHER value OR bounds OR both"
  *
- * Three valid configurations:
+ * EXTENDED: Now supports complex numbers for fractal rendering
+ *
+ * Four valid configurations:
  * 1. value only: k = 5 (fixed scalar)
  * 2. domain only: k ∈ [-10, 10] (range for sweep/animation, no current value)
  * 3. value + domain: k = 5, k ∈ [-10, 10] (current value within allowed range)
+ * 4. complex value: z = 3+4i (complex number for fractals)
  */
 export interface Parameter {
   id: string;
   name: string;
   /** Direct numeric value - NO EXPRESSIONS ALLOWED. Optional if domain is specified. */
-  value?: number | number[];
+  value?: number | number[] | ComplexNumber;
   /** Domain constraints (for sliders and independent variables). Optional if value is specified. */
   domain?: ParameterDomain;
   /** UI control configuration */
@@ -54,6 +60,8 @@ export interface Parameter {
   metadata?: ParameterMetadata;
   /** Error message if value is invalid */
   error?: string;
+  /** Whether this is a complex parameter */
+  isComplex?: boolean;
 }
 
 export interface ExpressionResult {

@@ -4,11 +4,27 @@ Welcome to **Parametric Keyframe Studio**! This guide will help you get started 
 
 ## Quick Start
 
-1. **Launch the app**: `npm install && npm run dev`
-2. **Open your browser**: Navigate to `http://localhost:3000`
-3. **Create a parameter**: Click "Add Parameter" to create a numeric parameter
-4. **Plot a function**: Add a function like `f(x) = sin(k*x)` where `k` is your parameter
-5. **Animate**: Add keyframes and scrub the timeline to see your animation
+### Basic Setup (Frontend Only)
+```bash
+npm install && npm run dev
+```
+Open browser: `http://localhost:5000`
+
+### Full Setup (With Video Export) ⭐ Recommended
+```bash
+npm install && npm run dev:full
+```
+This starts both frontend and backend in one terminal!
+
+**Prerequisites for video export**:
+- Install Manim: `pip install manim`
+
+### First Steps
+
+1. **Create a parameter**: Click "Add Parameter" to create a numeric parameter
+2. **Plot a function**: Add a function like `f(x) = sin(k*x)` where `k` is your parameter
+3. **Animate**: Add keyframes and scrub the timeline to see your animation
+4. **Export**: Render as MP4 video or export as PNG
 
 ## Core Concepts
 

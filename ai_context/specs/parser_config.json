@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "independentParam": "x",
+  "autoCreateFreeSymbols": true,
+  "defaultBounds": {
+    "min": -10,
+    "max": 10,
+    "step": 0.1
+  },
+  "listMaxLength": 2000,
+  "angleUnit": "rad",
+  "complex": false,
+  "broadcasting": "elementwise",
+  "lhs": {
+    "requireSingleBaseLetter": true,
+    "allowGreekBase": true,
+    "allowSubscript": true
+  },
+  "normalizationOrder": [
+    "mapBackslashAliasesToGlyphs",
+    "mapBareTokensAtBoundaries",
+    "applyLHSSpecificRestrictions",
+    "insertImplicitMultiplication",
+    "prettyRenderKeyboardOperators"
+  ]
+}

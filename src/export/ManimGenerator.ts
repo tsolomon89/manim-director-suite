@@ -68,7 +68,7 @@ export class ManimGenerator {
     script.push('        # Initialize parameters');
     const paramMap = new Map(parameters.map(p => [p.id, p]));
     for (const param of parameters) {
-      const value = typeof param.value === 'number' ? param.value : param.value[0] ?? 0;
+      const value = typeof param.value === 'number' ? param.value : (Array.isArray(param.value) ? param.value[0] ?? 0 : 0);
       script.push(`        ${param.name} = ValueTracker(${value})`);
     }
     script.push('');

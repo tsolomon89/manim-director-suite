@@ -78,19 +78,110 @@ export class SymbolRegistry {
   /**
    * Load token map from config file
    */
-  static async loadFromConfig(configPath: string = '/config/token-map.json'): Promise<SymbolRegistry> {
+  static async loadFromConfig(configPath: string = '/ai_context/specs/token_map.json'): Promise<SymbolRegistry> {
     try {
-      const response = await fetch(configPath);
-      if (!response.ok) {
+      // Try to load from ai_context specs first
+      const tokenMapResponse = await fetch(configPath);
+      const builtinsResponse = await fetch('/ai_context/specs/builtins.json');
+
+      if (!tokenMapResponse.ok) {
         console.warn(`Failed to load token map from ${configPath}, using fallback`);
         return new SymbolRegistry();
       }
-      const tokenMap = await response.json();
+
+      const tokenMapData = await tokenMapResponse.json();
+      const builtinsData = builtinsResponse.ok ? await builtinsResponse.json() : null;
+
+      // Convert new format to old format
+      const tokenMap = SymbolRegistry.convertNewFormatToOld(tokenMapData, builtinsData);
       return new SymbolRegistry(tokenMap);
     } catch (error) {
       console.warn('Failed to load token map, using fallback', error);
       return new SymbolRegistry();
     }
+  }
+
+  /**
+   * Convert new ai_context JSON format to old TokenMapConfig format
+   */
+  private static convertNewFormatToOld(tokenMapData: any, builtinsData: any): TokenMapConfig {
+    const aliases: Record<string, string> = {};
+    const constants: Record<string, {
+      glyph: string;
+      kind: 'constant' | 'imaginary';
+      eval: string | null;
+      description: string;
+    }> = {};
+    const greekGlyphs: Record<string, string> = {};
+    const operators: Record<string, { glyph: string; description: string; }> = {};
+    const functions: Record<string, { description: string; }> = {};
+
+    // Process token map rules
+    if (tokenMapData.rules) {
+      for (const rule of tokenMapData.rules) {
+        // Store Greek glyphs
+        greekGlyphs[rule.alias] = rule.glyph;
+
+        // If it has a bare token, store as alias
+        if (rule.allowBare && rule.bareToken) {
+          aliases[rule.bareToken] = rule.alias;
+        }
+      }
+    }
+
+    // Process keyboard operators
+    if (tokenMapData.keyboard) {
+      if (tokenMapData.keyboard.power) {
+        operators['^'] = { glyph: '^', description: 'Power' };
+      }
+      if (tokenMapData.keyboard.subscript) {
+        operators['_'] = { glyph: '_', description: 'Subscript' };
+      }
+      if (tokenMapData.keyboard.fraction) {
+        operators['/'] = { glyph: '/', description: 'Fraction' };
+      }
+    }
+
+    // Process builtins
+    if (builtinsData && builtinsData.constants) {
+      for (const builtin of builtinsData.constants) {
+        let evalExpr: string | null = null;
+
+        // Map value names to actual eval expressions
+        if (builtin.value === 'EULER_NUMBER') {
+          evalExpr = 'Math.E';
+        } else if (builtin.value === 'PI') {
+          evalExpr = 'Math.PI';
+        } else if (builtin.value === 'TAU') {
+          evalExpr = '2 * Math.PI';
+        } else if (builtin.value === 'INFINITY') {
+          evalExpr = 'Infinity';
+        } else if (builtin.value === 'IMAG_UNIT') {
+          evalExpr = null; // No real eval for complex
+        }
+
+        const kind: 'constant' | 'imaginary' = builtin.value === 'IMAG_UNIT' ? 'imaginary' : 'constant';
+
+        constants[builtin.name] = {
+          glyph: builtin.glyph,
+          kind: kind,
+          eval: evalExpr,
+          description: builtin.description
+        };
+
+        // Also store glyph mapping
+        greekGlyphs[builtin.name] = builtin.glyph;
+      }
+    }
+
+    return {
+      version: tokenMapData.version || 1,
+      aliases,
+      constants,
+      greekGlyphs,
+      operators,
+      functions
+    };
   }
 
   /**

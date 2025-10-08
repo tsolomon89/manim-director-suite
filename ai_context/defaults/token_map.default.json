@@ -1,0 +1,184 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "alias": "\\pi",
+      "glyph": "π",
+      "kind": "constant",
+      "allowBare": true,
+      "bareToken": "pi",
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": true,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\tau",
+      "glyph": "τ",
+      "kind": "constant",
+      "allowBare": true,
+      "bareToken": "tau",
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": true,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\alpha",
+      "glyph": "α",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\beta",
+      "glyph": "β",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\gamma",
+      "glyph": "γ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Gamma",
+      "glyph": "Γ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\delta",
+      "glyph": "δ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Delta",
+      "glyph": "Δ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\theta",
+      "glyph": "θ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Theta",
+      "glyph": "Θ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\lambda",
+      "glyph": "λ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Lambda",
+      "glyph": "Λ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\mu",
+      "glyph": "μ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\sigma",
+      "glyph": "σ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Sigma",
+      "glyph": "Σ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\phi",
+      "glyph": "φ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Phi",
+      "glyph": "Φ",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\omega",
+      "glyph": "ω",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    },
+    {
+      "alias": "\\Omega",
+      "glyph": "Ω",
+      "kind": "letter",
+      "allowBare": false,
+      "contexts": ["LHS_BASE", "LHS_SUBSCRIPT", "RHS"],
+      "disallowInsideLHSBase": false,
+      "allowInSubscript": true
+    }
+  ],
+  "keyboard": {
+    "power": "^",
+    "subscript": "_",
+    "fraction": "/"
+  },
+  "notes": "Apply mapping before implicit-multiplication resolution. '/' is visual fraction (pretty-render as \\frac{a}{b}). Backslash aliases are required; bare tokens apply at token boundaries and not inside the LHS base name (except in subscripts)."
+}

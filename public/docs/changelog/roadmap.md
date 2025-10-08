@@ -2,12 +2,14 @@
 
 ## Current State Assessment
 
-### ✅ What We Have (Phases 1-4 Complete)
+### ✅ What We Have (v2.1.0 - Latest)
 - **Configuration System** ✅ - Fully operational, zero hard-coded values
 - **Scene & Viewport** ✅ - Interactive 2D grid with pan/zoom camera
 - **Parameters & Expressions** ✅ - math.js integration, dependency resolution
 - **Function Plotting** ✅ - Real-time visualization with parameter integration
 - **UI Framework** ✅ - 3-column layout, settings panels, parameter/function controls
+- **Manim Video Export** ✅ - 1-click MP4 rendering with progress tracking
+- **Streamlined Deployment** ✅ - Single command starts frontend + backend
 
 ### 🎯 What's Missing to Transform This into a Powerful Tool
 

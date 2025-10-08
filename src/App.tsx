@@ -1,20 +1,22 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { configManager } from './config/ConfigManager';
 import { DEFAULT_FUNCTION_STEP } from './constants';
-import { ParameterPanel } from './ui/ParameterPanel';
-import { FunctionPanelNew } from './ui/FunctionPanelNew';
-import { GridConfigPanel } from './ui/GridConfigPanel';
+import { Toolbar } from './ui/Toolbar';
+import { ViewportContainer } from './ui/ViewportContainer';
+import { ParametersSidebar } from './ui/ParametersSidebar';
+import { FunctionsSidebar } from './ui/FunctionsSidebar';
+import { KeyframesSidebar } from './ui/KeyframesSidebar';
+import { VisualSettingsSidebar } from './ui/VisualSettingsSidebar';
 import { TimelineView } from './ui/TimelineView';
 import { TimelineControls } from './ui/TimelineControls';
-import { KeyframePanel } from './ui/KeyframePanel';
 import { DesmosImportDialog } from './ui/DesmosImportDialog';
 import { SaveLoadDialog } from './ui/SaveLoadDialog';
 import { ExportDialog } from './ui/ExportDialog';
 import { ManimExportDialog } from './ui/ManimExportDialog';
-import { RendererToggle, type RendererType } from './ui/RendererToggle';
+import { useLayoutManager } from './ui/useLayoutManager';
+import type { SidebarId } from './ui/layout-types';
+import type { RendererType } from './ui/RendererToggle';
 import { Viewport } from './scene/Viewport';
-import { ValueControl } from './ui/ValueControl';
 import { Camera } from './scene/Camera';
 import { ParameterManager } from './engine/ParameterManager';
 import { FunctionManager } from './engine/FunctionManager';
@@ -45,6 +47,7 @@ function App() {
   const [parameters, setParameters] = useState<any[]>([]);
   const [functionDefs, setFunctionDefs] = useState<FunctionDefinition[]>([]);
   const [gridConfig, setGridConfig] = useState<GridRenderConfig>(getDefaultGridConfig());
+  const [complexMode, setComplexMode] = useState<boolean>(false);
 
   // Timeline state
   const [timelineState, setTimelineState] = useState<TimelineState | null>(null);
@@ -192,7 +195,7 @@ function App() {
         },
       };
     });
-  }, [functionDefs]);
+  }, [functionDefs, parameters]); // Added 'parameters' dependency to react to domain changes
 
   // All callbacks must be defined before any conditional returns
   const handleCameraChange = useCallback((cam: Camera) => {
@@ -266,6 +269,145 @@ function App() {
     if (pm.updateValue(id, value)) {
       setParameters(pm.getAllParameters());
     }
+  }, []);
+
+  const handleParameterUpdateDomain = useCallback((id: string, domain: { min: number; max: number; step: number }) => {
+    const pm = parameterManagerRef.current;
+    const ivm = independentVarManagerRef.current;
+    const param = pm.getParameter(id);
+
+    if (param) {
+      param.domain = domain;
+      // Also update uiControl to reflect new domain
+      if (param.uiControl) {
+        param.uiControl.min = domain.min;
+        param.uiControl.max = domain.max;
+        param.uiControl.step = domain.step;
+      }
+
+      // If this parameter is an independent variable, update its domain too
+      const indepVar = ivm.getVariableByName(param.name);
+      if (indepVar) {
+        ivm.updateDomain(indepVar.id, {
+          min: domain.min,
+          max: domain.max,
+          step: domain.step
+        });
+      }
+
+      setParameters(pm.getAllParameters());
+      // Force a re-render by updating a timestamp or counter
+      setParameters([...pm.getAllParameters()]);
+    }
+  }, []);
+
+  const handleParameterClearValue = useCallback((id: string) => {
+    const pm = parameterManagerRef.current;
+    const param = pm.getParameter(id);
+    if (param) {
+      // Set value to undefined to make it implicit/domain-only
+      param.value = undefined;
+      setParameters([...pm.getAllParameters()]);
+    }
+  }, []);
+
+  const handleConvertToFunction = useCallback((paramId: string) => {
+    const pm = parameterManagerRef.current;
+    const fm = functionManagerRef.current;
+
+    // Get the parameter
+    const param = pm.getParameter(paramId);
+    if (!param) {
+      console.error('Parameter not found:', paramId);
+      return;
+    }
+
+    // Create a function with the parameter's name as the LHS
+    // For a parameter like "k = 5", create function "k = 5"
+    const expression = `${param.name} = ${param.value ?? 0}`;
+
+    // Build parameter map
+    const paramMap = new Map(pm.getAllParameters().map(p => [p.name, p.id]));
+
+    // Auto-create parameter callback
+    const onCreateParameter = (name: string) => {
+      const defaults = configManager.get('parameters.defaults');
+      return pm.createParameter(name, 1, {
+        domain: { min: defaults.min, max: defaults.max, step: defaults.step },
+        uiControl: { type: 'slider', min: defaults.min, max: defaults.max, step: defaults.step },
+        metadata: { source: 'auto', created: new Date().toISOString() }
+      })!;
+    };
+
+    // Create the function
+    const result = fm.createFunction(expression, paramMap, onCreateParameter);
+    if (result && 'success' in result && !result.success) {
+      console.error('Failed to convert parameter to function:', result.error || 'Unknown error');
+      return;
+    }
+
+    // Delete the parameter
+    pm.deleteParameter(paramId);
+
+    // Update both states
+    setParameters(pm.getAllParameters());
+    setFunctionDefs(fm.getAllFunctions());
+  }, []);
+
+  const handleDemoteToParameter = useCallback((functionId: string) => {
+    const fm = functionManagerRef.current;
+    const pm = parameterManagerRef.current;
+
+    // Get the function
+    const func = fm.getFunction(functionId);
+    if (!func) {
+      console.error('Function not found:', functionId);
+      return;
+    }
+
+    // Only allow demotion for 0-arity functions (no arguments)
+    if (func.lhs.arity !== undefined && func.lhs.arity > 0) {
+      console.error('Cannot demote function with arguments to parameter');
+      return;
+    }
+
+    // Evaluate the RHS to get a numeric value
+    const engine = expressionEngineRef.current;
+    const evaluatedValue = engine.evaluate(func.expression);
+
+    if (typeof evaluatedValue !== 'number') {
+      console.error('Cannot demote function: RHS does not evaluate to a number');
+      return;
+    }
+
+    // Create a parameter with the function's name
+    const defaults = configManager.get('parameters.defaults');
+    const newParam = pm.createParameter(func.lhs.name, evaluatedValue, {
+      domain: {
+        min: defaults.min,
+        max: defaults.max,
+        step: defaults.step,
+      },
+      uiControl: {
+        type: 'number',
+        min: defaults.min,
+        max: defaults.max,
+        step: defaults.step,
+      },
+      metadata: { source: 'demoted-function', created: new Date().toISOString() }
+    });
+
+    if (!newParam) {
+      console.error('Failed to create parameter from function');
+      return;
+    }
+
+    // Delete the function
+    fm.deleteFunction(functionId);
+
+    // Update both states
+    setParameters(pm.getAllParameters());
+    setFunctionDefs(fm.getAllFunctions());
   }, []);
 
   // Function handlers (using FunctionManager for spec compliance)
@@ -433,7 +575,7 @@ function App() {
     const paramData: Record<string, { value: number; include?: boolean; easing?: string }> = {};
     allParams.forEach((p) => {
       // For now, only support scalar values in keyframes (arrays not supported yet)
-      const scalarValue = typeof p.value === 'number' ? p.value : p.value[0] ?? 0;
+      const scalarValue = typeof p.value === 'number' ? p.value : (Array.isArray(p.value) ? p.value[0] ?? 0 : 0);
       paramData[p.id] = { value: scalarValue, include: true, easing: 'smoothstep' };
     });
     builder.withParameters(paramData);
@@ -636,6 +778,29 @@ function App() {
     }
   }, [camera]);
 
+  // Layout manager - must be before conditional returns
+  const { layout, setSidebarPosition, toggleFooter } = useLayoutManager();
+
+  // Helper to toggle sidebar visibility
+  const handleToggleSidebar = useCallback((id: SidebarId) => {
+    const currentPosition = layout.sidebars[id].position;
+    if (currentPosition === 'closed') {
+      // Reopen to default position
+      setSidebarPosition(id, layout.sidebars[id].defaultPosition);
+    } else {
+      // Close it
+      setSidebarPosition(id, 'closed');
+    }
+  }, [layout, setSidebarPosition]);
+
+  // Sidebar visibility states for toolbar
+  const sidebarStates = useMemo(() => ({
+    parameters: layout.sidebars.parameters.position !== 'closed',
+    functions: layout.sidebars.functions.position !== 'closed',
+    keyframes: layout.sidebars.keyframes.position !== 'closed',
+    'visual-settings': layout.sidebars['visual-settings'].position !== 'closed',
+  }), [layout]);
+
   // Conditional returns AFTER all hooks
   if (error) {
     return (
@@ -657,52 +822,18 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <div>
-          <h1>Parametric Keyframe Studio</h1>
-          <p className="subtitle">Phase 8: Save/Load + Full MVP</p>
-        </div>
-        <div className="header-buttons">
-          <button
-            className="header-button"
-            onClick={() => setShowSaveLoadDialog('save')}
-            title="Save Project"
-          >
-            💾 Save
-          </button>
-          <button
-            className="header-button"
-            onClick={() => setShowSaveLoadDialog('load')}
-            title="Load Project"
-          >
-            📂 Load
-          </button>
-          <button
-            className="header-button import-button"
-            onClick={() => setShowImportDialog(true)}
-            title="Import from Desmos JSON"
-          >
-            📥 Import
-          </button>
-          <button
-            className="header-button"
-            onClick={() => setShowExportDialog('png')}
-            title="Export current frame as PNG"
-          >
-            📸 PNG
-          </button>
-          <button
-            className="header-button"
-            onClick={() => setShowExportDialog('manim')}
-            title="Export animation as Manim script"
-          >
-            🎬 Manim
-          </button>
-          <Link to="/docs" className="header-button docs-link" title="View Documentation">
-            📖 Docs
-          </Link>
-        </div>
-      </header>
+      <Toolbar
+        projectName={projectMetadata.name || 'Parametric Keyframe Studio'}
+        onSave={() => setShowSaveLoadDialog('save')}
+        onLoad={() => setShowSaveLoadDialog('load')}
+        onImport={() => setShowImportDialog(true)}
+        onExportPNG={() => setShowExportDialog('png')}
+        onExportManim={() => setShowExportDialog('manim')}
+        onToggleSidebar={handleToggleSidebar}
+        onToggleFooter={toggleFooter}
+        sidebarStates={sidebarStates}
+        footerVisible={layout.footerVisible}
+      />
 
       {/* Import success/error message */}
       {importMessage && (
@@ -711,19 +842,68 @@ function App() {
         </div>
       )}
 
-      <div className="app-content">
-        <aside className="sidebar-left">
-          <ParameterPanel
-            parameters={parameters}
-            functions={functionDefs}
-            onParameterCreate={handleParameterCreate}
-            onParameterChange={handleParameterChange}
-            onParameterDelete={handleParameterDelete}
-            onParameterUpdateValue={handleParameterUpdateValue}
-          />
-        </aside>
-
-        <main className="main-content viewport-main">
+      <ViewportContainer
+        layout={layout}
+        onSidebarPositionChange={setSidebarPosition}
+        sidebarContent={{
+          parameters: (
+            <ParametersSidebar
+              parameters={parameters}
+              functions={functionDefs}
+              onParameterCreate={handleParameterCreate}
+              onParameterChange={handleParameterChange}
+              onParameterDelete={handleParameterDelete}
+              onParameterUpdateValue={handleParameterUpdateValue}
+              onParameterClearValue={handleParameterClearValue}
+              onParameterUpdateDomain={handleParameterUpdateDomain}
+              onConvertToFunction={handleConvertToFunction}
+            />
+          ),
+          functions: (
+            <FunctionsSidebar
+              functions={functionDefs}
+              independentVariables={independentVarManagerRef.current.getAllVariables()}
+              onFunctionCreate={handleFunctionCreate}
+              onFunctionUpdate={handleFunctionUpdate}
+              onFunctionUpdateExpression={handleFunctionUpdateExpression}
+              onFunctionDelete={handleFunctionDelete}
+              onFunctionToggle={handleFunctionToggle}
+              onChangeIndependentVariable={handleChangeIndependentVariable}
+              onDemoteToParameter={handleDemoteToParameter}
+            />
+          ),
+          keyframes: (
+            <KeyframesSidebar
+              keyframes={keyframes}
+              selectedKeyframeId={selectedKeyframeId}
+              currentTime={timelineState?.currentTime ?? 0}
+              onCreateKeyframe={handleCreateKeyframe}
+              onUpdateKeyframe={handleUpdateKeyframe}
+              onDeleteKeyframe={handleDeleteKeyframe}
+              onCloneKeyframe={handleCloneKeyframe}
+              onSelectKeyframe={setSelectedKeyframeId}
+            />
+          ),
+          'visual-settings': (
+            <VisualSettingsSidebar
+              camera={camera}
+              cameraInfo={cameraInfo}
+              onResetCamera={handleResetCamera}
+              onCameraXChange={handleCameraXChange}
+              onCameraYChange={handleCameraYChange}
+              onCameraZoomChange={handleCameraZoomChange}
+              gridConfig={gridConfig}
+              onGridConfigChange={setGridConfig}
+              currentRenderer={currentRenderer}
+              onRendererChange={setCurrentRenderer}
+              manimAvailable={manimAvailable}
+              rendererStats={rendererStats}
+              complexMode={complexMode}
+              onComplexModeChange={setComplexMode}
+            />
+          ),
+        }}
+        viewportContent={
           <Viewport
             gridStyleId={selectedGridStyle}
             gridConfig={gridConfig}
@@ -736,111 +916,34 @@ function App() {
             }}
             onRendererStatsUpdate={setRendererStats}
           />
-          <RendererToggle
-            currentRenderer={currentRenderer}
-            onRendererChange={setCurrentRenderer}
-            manimAvailable={manimAvailable}
-            cacheStats={rendererStats.cacheStats}
-            latencyMs={rendererStats.latencyMs}
-          />
-        </main>
-
-        <aside className="sidebar-right">
-          <KeyframePanel
-            keyframes={keyframes}
-            selectedKeyframeId={selectedKeyframeId}
-            currentTime={timelineState?.currentTime ?? 0}
-            onCreateKeyframe={handleCreateKeyframe}
-            onUpdateKeyframe={handleUpdateKeyframe}
-            onDeleteKeyframe={handleDeleteKeyframe}
-            onCloneKeyframe={handleCloneKeyframe}
-            onSelectKeyframe={setSelectedKeyframeId}
-          />
-
-          <FunctionPanelNew
-            functions={functionDefs}
-            independentVariables={independentVarManagerRef.current.getAllVariables()}
-            onFunctionCreate={handleFunctionCreate}
-            onFunctionUpdate={handleFunctionUpdate}
-            onFunctionUpdateExpression={handleFunctionUpdateExpression}
-            onFunctionDelete={handleFunctionDelete}
-            onFunctionToggle={handleFunctionToggle}
-            onChangeIndependentVariable={handleChangeIndependentVariable}
-          />
-
-          <GridConfigPanel
-            config={gridConfig}
-            onChange={setGridConfig}
-          />
-
-          <div className="controls-section">
-            <h3>Camera Controls</h3>
-
-            <div className="control-group">
-              <button className="reset-button" onClick={handleResetCamera}>
-                Reset Camera
-              </button>
-            </div>
-
-            <div className="camera-controls">
-              <h4>Position</h4>
-              <ValueControl
-                label="X"
-                value={cameraInfo.x}
-                onChange={handleCameraXChange}
-                showSlider={false}
-                stepAmount={1}
-                precision={2}
+        }
+        footerContent={
+          timelineState ? (
+            <>
+              <TimelineControls
+                timelineState={timelineState}
+                onPlay={handlePlay}
+                onPause={handlePause}
+                onStop={handleStop}
+                onJumpToStart={handleJumpToStart}
+                onJumpToEnd={handleJumpToEnd}
+                onStepForward={handleStepForward}
+                onStepBackward={handleStepBackward}
+                onSpeedChange={handleSpeedChange}
+                onLoopModeChange={handleLoopModeChange}
               />
-              <ValueControl
-                label="Y"
-                value={cameraInfo.y}
-                onChange={handleCameraYChange}
-                showSlider={false}
-                stepAmount={1}
-                precision={2}
+              <TimelineView
+                timelineState={timelineState}
+                keyframes={keyframes}
+                onTimeChange={handleTimeChange}
+                onKeyframeSelect={setSelectedKeyframeId}
+                onKeyframeMove={handleKeyframeMove}
+                selectedKeyframeId={selectedKeyframeId}
               />
-              <ValueControl
-                label="Zoom"
-                value={cameraInfo.zoom}
-                onChange={handleCameraZoomChange}
-                min={configManager.get<number>('camera.zoomMin')}
-                max={configManager.get<number>('camera.zoomMax')}
-                showSlider={true}
-                step={0.1}
-                stepAmount={0.5}
-                precision={2}
-              />
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      {/* Timeline Section */}
-      {timelineState && (
-        <footer className="timeline-section">
-          <TimelineControls
-            timelineState={timelineState}
-            onPlay={handlePlay}
-            onPause={handlePause}
-            onStop={handleStop}
-            onJumpToStart={handleJumpToStart}
-            onJumpToEnd={handleJumpToEnd}
-            onStepForward={handleStepForward}
-            onStepBackward={handleStepBackward}
-            onSpeedChange={handleSpeedChange}
-            onLoopModeChange={handleLoopModeChange}
-          />
-          <TimelineView
-            timelineState={timelineState}
-            keyframes={keyframes}
-            onTimeChange={handleTimeChange}
-            onKeyframeSelect={setSelectedKeyframeId}
-            onKeyframeMove={handleKeyframeMove}
-            selectedKeyframeId={selectedKeyframeId}
-          />
-        </footer>
-      )}
+            </>
+          ) : null
+        }
+      />
 
       {/* Desmos Import Dialog */}
       {showImportDialog && (

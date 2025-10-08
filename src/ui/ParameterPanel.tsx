@@ -16,6 +16,8 @@ interface ParameterPanelProps {
   onParameterCreate: (name: string, value: number, controlType: UIControlType, role?: ParameterRole) => void;
   onParameterDelete: (id: string) => void;
   onParameterUpdateValue: (id: string, value: number) => void;
+  onParameterClearValue?: (id: string) => void;
+  onParameterUpdateDomain?: (id: string, domain: { min: number; max: number; step: number }) => void;
   onConvertToFunction?: (id: string) => void;
 }
 
@@ -26,6 +28,8 @@ export function ParameterPanel({
   onParameterCreate,
   onParameterDelete,
   onParameterUpdateValue,
+  onParameterClearValue,
+  onParameterUpdateDomain,
   onConvertToFunction,
 }: ParameterPanelProps) {
   const [isCreating, setIsCreating] = useState(false);
@@ -34,6 +38,11 @@ export function ParameterPanel({
   const [newControlType, setNewControlType] = useState<UIControlType>('slider');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [editingDomainId, setEditingDomainId] = useState<string | null>(null);
+  const [editDomainMin, setEditDomainMin] = useState('');
+  const [editDomainMax, setEditDomainMax] = useState('');
+  const [editDomainStep, setEditDomainStep] = useState('');
+  const [clearValueOnSave, setClearValueOnSave] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [createError, setCreateError] = useState<string | null>(null);
   const [collisionSuggestions, setCollisionSuggestions] = useState<string[]>([]);
@@ -141,6 +150,44 @@ export function ParameterPanel({
   const handleCancelEdit = () => {
     setEditingId(null);
     setEditValue('');
+  };
+
+  const handleStartEditDomain = (param: Parameter) => {
+    setEditingDomainId(param.id);
+    setEditDomainMin(String(param.domain?.min ?? ''));
+    setEditDomainMax(String(param.domain?.max ?? ''));
+    setEditDomainStep(String(param.domain?.step ?? ''));
+    setClearValueOnSave(param.value === undefined);
+  };
+
+  const handleSaveDomain = (id: string) => {
+    if (onParameterUpdateDomain) {
+      const min = parseFloat(editDomainMin);
+      const max = parseFloat(editDomainMax);
+      const step = parseFloat(editDomainStep);
+
+      if (!isNaN(min) && !isNaN(max) && !isNaN(step)) {
+        onParameterUpdateDomain(id, { min, max, step });
+
+        // Clear value if checkbox is checked
+        if (clearValueOnSave && onParameterClearValue) {
+          onParameterClearValue(id);
+        }
+      }
+    }
+    setEditingDomainId(null);
+    setEditDomainMin('');
+    setEditDomainMax('');
+    setEditDomainStep('');
+    setClearValueOnSave(false);
+  };
+
+  const handleCancelEditDomain = () => {
+    setEditingDomainId(null);
+    setEditDomainMin('');
+    setEditDomainMax('');
+    setEditDomainStep('');
+    setClearValueOnSave(false);
   };
 
   const handleGreekSymbolSelect = (symbol: string) => {
@@ -351,6 +398,15 @@ export function ParameterPanel({
                   )}
                 </div>
                 <div className="parameter-actions">
+                  {onConvertToFunction && (
+                    <button
+                      onClick={() => onConvertToFunction(param.id)}
+                      className="convert-button"
+                      title="Convert to Function"
+                    >
+                      ƒ
+                    </button>
+                  )}
                   <button
                     onClick={() => handleStartEdit(param)}
                     className="edit-button"
@@ -398,7 +454,14 @@ export function ParameterPanel({
                 </div>
               ) : (
                 <div className="parameter-value-display">
-                  <span className="parameter-value">{typeof param.value === 'number' ? param.value.toFixed(3) : String(param.value)}</span>
+                  <span className="parameter-value">
+                    {param.value === undefined
+                      ? <em style={{ color: '#888' }}>implicit (domain-only)</em>
+                      : typeof param.value === 'number'
+                        ? param.value.toFixed(3)
+                        : String(param.value)
+                    }
+                  </span>
                 </div>
               )}
 
@@ -417,7 +480,7 @@ export function ParameterPanel({
                 </div>
               )}
 
-              {!param.error && (
+              {!param.error && param.value !== undefined && (
                 <div className="parameter-control-wrapper">
                   <ParameterControl
                     parameter={param}
@@ -425,6 +488,91 @@ export function ParameterPanel({
                   />
                 </div>
               )}
+
+              {/* Domain/Bounds Editor */}
+              <div className="parameter-domain-section">
+                {editingDomainId === param.id ? (
+                  <div className="domain-edit">
+                    <div className="domain-edit-header">
+                      <span>Edit Domain/Bounds</span>
+                    </div>
+                    <div className="domain-inputs">
+                      <label>
+                        Min:
+                        <input
+                          type="number"
+                          value={editDomainMin}
+                          onChange={(e) => setEditDomainMin(e.target.value)}
+                          placeholder="Min"
+                          className="domain-input"
+                        />
+                      </label>
+                      <label>
+                        Max:
+                        <input
+                          type="number"
+                          value={editDomainMax}
+                          onChange={(e) => setEditDomainMax(e.target.value)}
+                          placeholder="Max"
+                          className="domain-input"
+                        />
+                      </label>
+                      <label>
+                        Step:
+                        <input
+                          type="number"
+                          value={editDomainStep}
+                          onChange={(e) => setEditDomainStep(e.target.value)}
+                          placeholder="Step"
+                          className="domain-input"
+                          step="0.01"
+                        />
+                      </label>
+                    </div>
+                    {onParameterClearValue && (
+                      <div className="domain-value-option">
+                        <label className="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={clearValueOnSave}
+                            onChange={(e) => setClearValueOnSave(e.target.checked)}
+                          />
+                          <span>Make implicit (clear value, domain-only like x)</span>
+                        </label>
+                      </div>
+                    )}
+                    <div className="domain-edit-actions">
+                      <button onClick={() => handleSaveDomain(param.id)} className="save-button">
+                        Save Domain
+                      </button>
+                      <button onClick={handleCancelEditDomain} className="cancel-button">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="domain-display">
+                    <div className="domain-info">
+                      {param.domain ? (
+                        <span className="domain-text">
+                          Domain: [{param.domain.min.toFixed(2)}, {param.domain.max.toFixed(2)}] step: {param.domain.step}
+                        </span>
+                      ) : (
+                        <span className="domain-text no-domain">No domain set (unbounded)</span>
+                      )}
+                    </div>
+                    {onParameterUpdateDomain && (
+                      <button
+                        onClick={() => handleStartEditDomain(param)}
+                        className="edit-domain-button"
+                        title="Edit domain/bounds"
+                      >
+                        ⚙ Edit Domain
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           ))
         )}

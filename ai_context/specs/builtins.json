@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "constants": [
+    {
+      "name": "e",
+      "glyph": "e",
+      "value": "EULER_NUMBER",
+      "rebindable": false,
+      "description": "Euler's number (2.71828...)"
+    },
+    {
+      "name": "\\pi",
+      "glyph": "π",
+      "value": "PI",
+      "rebindable": false,
+      "description": "Pi (3.14159...)"
+    },
+    {
+      "name": "\\tau",
+      "glyph": "τ",
+      "value": "TAU",
+      "rebindable": false,
+      "description": "Tau = 2π (6.28318...)"
+    },
+    {
+      "name": "∞",
+      "glyph": "∞",
+      "value": "INFINITY",
+      "rebindable": false,
+      "description": "Infinity"
+    },
+    {
+      "name": "i",
+      "glyph": "i",
+      "value": "IMAG_UNIT",
+      "rebindable": false,
+      "requires": {
+        "complex": true
+      },
+      "description": "Imaginary unit (√-1), only available in complex mode"
+    }
+  ]
+}

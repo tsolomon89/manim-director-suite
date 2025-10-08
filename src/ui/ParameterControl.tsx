@@ -17,7 +17,7 @@ export function ParameterControl({ parameter, onChange }: ParameterControlProps)
   const defaults = configManager.get('parameters.defaults');
 
   // Handle array values - only support scalar for now
-  const scalarValue = typeof value === 'number' ? value : value[0] ?? 0;
+  const scalarValue = typeof value === 'number' ? value : (Array.isArray(value) ? value[0] ?? 0 : 0);
 
   // Determine if slider should be shown based on control type
   const showSlider = uiControl?.type === 'slider' ||

@@ -686,7 +686,7 @@ it('should create parameter and animate it', () => {
 ### Development
 
 ```bash
-npm run dev        # Start dev server (http://localhost:3000)
+npm run dev        # Start dev server (http://localhost:5000)
 npm run build      # Production build
 npm run preview    # Preview production build
 ```

@@ -341,7 +341,8 @@
 }
 
 .edit-button,
-.delete-button {
+.delete-button,
+.convert-button {
   width: 24px;
   height: 24px;
   background: none;
@@ -366,6 +367,12 @@
   border-color: #ff6b6b;
   color: #ff6b6b;
   background-color: rgba(255, 107, 107, 0.1);
+}
+
+.convert-button:hover {
+  border-color: #10b981;
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
 }
 
 .parameter-expression {
@@ -460,4 +467,129 @@
 
 .cancel-button:hover {
   background-color: #555;
+}
+
+/* Domain/Bounds Editor Styles */
+.parameter-domain-section {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #333;
+}
+
+.domain-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #1a1a1a;
+  border-radius: 4px;
+}
+
+.domain-info {
+  flex: 1;
+}
+
+.domain-text {
+  color: #888;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.domain-text.no-domain {
+  font-style: italic;
+  color: #666;
+}
+
+.edit-domain-button {
+  padding: 0.4rem 0.8rem;
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.edit-domain-button:hover {
+  background-color: #444;
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.domain-edit {
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+
+.domain-edit-header {
+  font-weight: 600;
+  color: #10b981;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.domain-inputs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.domain-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.domain-input {
+  padding: 0.4rem;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 3px;
+  color: #fff;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.domain-input:focus {
+  outline: none;
+  border-color: #10b981;
+  background-color: #333;
+}
+
+.domain-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.domain-value-option {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background-color: #2a2a2a;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #ccc;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  flex: 1;
 }

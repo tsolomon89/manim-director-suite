@@ -4,7 +4,6 @@
  */
 
 import { useState } from 'react';
-import { ExpressionEngine } from '../engine/ExpressionEngine';
 import { ImplicitFunctionPlotter } from '../scene/ImplicitFunctionPlotter';
 import type { ImplicitFunction } from '../scene/implicit-types';
 import './FunctionPanel.css';

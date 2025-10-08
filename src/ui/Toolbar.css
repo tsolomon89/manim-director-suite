@@ -1,0 +1,145 @@
+.toolbar {
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-left: 1rem;
+}
+
+.toolbar-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: #e8e8e8;
+}
+
+.toolbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+
+.toolbar-menu-item {
+  position: relative;
+}
+
+.toolbar-menu-button {
+  background: transparent;
+  border: none;
+  color: #ccc;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  height: 48px;
+}
+
+.toolbar-menu-button:hover,
+.toolbar-menu-button.active {
+  background-color: #3a3a3a;
+  color: #e8e8e8;
+}
+
+.toolbar-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2d2d2d;
+  border: 1px solid #555;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  min-width: 220px;
+  padding: 0.25rem 0;
+  z-index: 1000;
+  animation: dropdownSlide 0.1s ease-out;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toolbar-dropdown button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #e8e8e8;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+}
+
+.toolbar-dropdown button:hover:not(:disabled) {
+  background-color: #4a90e2;
+}
+
+.toolbar-dropdown button:disabled {
+  color: #666;
+  cursor: not-allowed;
+}
+
+.toolbar-dropdown button:disabled:hover {
+  background-color: transparent;
+}
+
+.menu-label {
+  flex: 1;
+}
+
+.menu-shortcut {
+  color: #888;
+  font-size: 0.8rem;
+  margin-left: 1.5rem;
+}
+
+.menu-separator {
+  height: 1px;
+  background-color: #444;
+  margin: 0.25rem 0;
+}
+
+.toolbar-right {
+  padding-right: 1rem;
+}
+
+.toolbar-docs-link {
+  background: #7c3aed;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toolbar-docs-link:hover {
+  background: #6d28d9;
+}

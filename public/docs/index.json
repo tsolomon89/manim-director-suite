@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "categories": [
     {
       "id": "user-guide",
@@ -12,8 +12,13 @@
           "id": "getting-started",
           "title": "Getting Started",
           "file": "user-guide/getting-started.md",
-          "description": "Quick start guide and basic concepts",
-          "tags": ["basics", "tutorial", "intro"],
+          "description": "Quick start guide and basic concepts (NEW: npm run dev:full!)",
+          "tags": [
+            "basics",
+            "tutorial",
+            "intro",
+            "quickstart"
+          ],
           "order": 1
         },
         {
@@ -21,7 +26,11 @@
           "title": "Parameters",
           "file": "user-guide/parameters.md",
           "description": "Working with numeric parameters and expressions",
-          "tags": ["parameters", "expressions", "variables"],
+          "tags": [
+            "parameters",
+            "expressions",
+            "variables"
+          ],
           "order": 2
         },
         {
@@ -29,7 +38,11 @@
           "title": "Functions & Plotting",
           "file": "user-guide/functions.md",
           "description": "Creating and visualizing mathematical functions",
-          "tags": ["functions", "plotting", "graphs"],
+          "tags": [
+            "functions",
+            "plotting",
+            "graphs"
+          ],
           "order": 3
         },
         {
@@ -37,15 +50,25 @@
           "title": "Timeline & Keyframes",
           "file": "user-guide/timeline.md",
           "description": "Animating with keyframes and interpolation",
-          "tags": ["animation", "keyframes", "timeline"],
+          "tags": [
+            "animation",
+            "keyframes",
+            "timeline"
+          ],
           "order": 4
         },
         {
           "id": "export",
           "title": "Export & Rendering",
           "file": "user-guide/export.md",
-          "description": "Exporting PNGs, videos, and Manim scripts",
-          "tags": ["export", "render", "manim"],
+          "description": "Exporting PNGs and rendering MP4 videos with Manim (NEW: 1-click video export!)",
+          "tags": [
+            "export",
+            "render",
+            "manim",
+            "video",
+            "mp4"
+          ],
           "order": 5
         }
       ]
@@ -62,7 +85,11 @@
           "title": "Expression Syntax",
           "file": "reference/expression-syntax.md",
           "description": "Mathematical expression syntax and functions",
-          "tags": ["syntax", "math", "expressions"],
+          "tags": [
+            "syntax",
+            "math",
+            "expressions"
+          ],
           "order": 1
         },
         {
@@ -70,7 +97,11 @@
           "title": "Keyboard Shortcuts",
           "file": "reference/keyboard-shortcuts.md",
           "description": "Complete list of keyboard shortcuts",
-          "tags": ["shortcuts", "keyboard", "productivity"],
+          "tags": [
+            "shortcuts",
+            "keyboard",
+            "productivity"
+          ],
           "order": 2
         },
         {
@@ -78,7 +109,11 @@
           "title": "Configuration System",
           "file": "reference/config-system.md",
           "description": "How the configuration-driven architecture works",
-          "tags": ["config", "presets", "customization"],
+          "tags": [
+            "config",
+            "presets",
+            "customization"
+          ],
           "order": 3
         },
         {
@@ -86,8 +121,51 @@
           "title": "File Formats",
           "file": "reference/file-formats.md",
           "description": "Project files, Desmos JSON, and export formats",
-          "tags": ["files", "json", "formats"],
+          "tags": [
+            "files",
+            "json",
+            "formats"
+          ],
           "order": 4
+        },
+        {
+          "id": "operators",
+          "title": "Operator Reference",
+          "file": "reference/operators.md",
+          "description": "Complete reference for all mathematical operators",
+          "tags": [
+            "operators",
+            "math",
+            "reference",
+            "auto-generated"
+          ],
+          "order": 5
+        },
+        {
+          "id": "fractal-presets",
+          "title": "Fractal Presets",
+          "file": "reference/fractal-presets.md",
+          "description": "Built-in fractal configurations and usage",
+          "tags": [
+            "fractals",
+            "presets",
+            "reference",
+            "auto-generated"
+          ],
+          "order": 6
+        },
+        {
+          "id": "complex-numbers",
+          "title": "Complex Numbers",
+          "file": "reference/complex-numbers.md",
+          "description": "Working with complex numbers and polynomials",
+          "tags": [
+            "complex",
+            "math",
+            "reference",
+            "auto-generated"
+          ],
+          "order": 7
         }
       ]
     },
@@ -103,7 +181,11 @@
           "title": "Architecture Overview",
           "file": "developer/architecture.md",
           "description": "System architecture and design principles",
-          "tags": ["architecture", "design", "overview"],
+          "tags": [
+            "architecture",
+            "design",
+            "overview"
+          ],
           "order": 1
         },
         {
@@ -111,7 +193,11 @@
           "title": "Testing Guide",
           "file": "developer/testing.md",
           "description": "How to write and run tests",
-          "tags": ["testing", "qa", "unit-tests"],
+          "tags": [
+            "testing",
+            "qa",
+            "unit-tests"
+          ],
           "order": 2
         },
         {
@@ -119,7 +205,11 @@
           "title": "Contributing",
           "file": "developer/contributing.md",
           "description": "How to contribute to the project",
-          "tags": ["contributing", "development", "git"],
+          "tags": [
+            "contributing",
+            "development",
+            "git"
+          ],
           "order": 3
         },
         {
@@ -127,15 +217,25 @@
           "title": "API Reference",
           "file": "developer/api-reference.md",
           "description": "Core APIs and TypeScript interfaces",
-          "tags": ["api", "typescript", "reference"],
+          "tags": [
+            "api",
+            "typescript",
+            "reference"
+          ],
           "order": 4
         },
         {
           "id": "backend-setup",
           "title": "Backend Setup",
           "file": "developer/BACKEND_SETUP.md",
-          "description": "Setting up the backend/Manim integration",
-          "tags": ["setup", "backend", "manim"],
+          "description": "Setting up the Manim backend service (NEW: npm run dev:full support!)",
+          "tags": [
+            "setup",
+            "backend",
+            "manim",
+            "video",
+            "deployment"
+          ],
           "order": 5
         },
         {
@@ -143,7 +243,11 @@
           "title": "GitHub Setup",
           "file": "developer/GITHUB_SETUP.md",
           "description": "Git and GitHub configuration",
-          "tags": ["git", "github", "setup"],
+          "tags": [
+            "git",
+            "github",
+            "setup"
+          ],
           "order": 6
         },
         {
@@ -151,7 +255,11 @@
           "title": "Manim Renderer Implementation",
           "file": "developer/MANIM_RENDERER_IMPLEMENTATION.md",
           "description": "Manim integration technical details",
-          "tags": ["manim", "renderer", "implementation"],
+          "tags": [
+            "manim",
+            "renderer",
+            "implementation"
+          ],
           "order": 7
         }
       ]
@@ -168,7 +276,11 @@
           "title": "v1.0.0 - MVP Complete",
           "file": "changelog/v1.0.0.md",
           "description": "Initial MVP release with all 8 phases",
-          "tags": ["release", "mvp", "v1"],
+          "tags": [
+            "release",
+            "mvp",
+            "v1"
+          ],
           "order": 1
         },
         {
@@ -176,16 +288,39 @@
           "title": "v2.0.0 - Advanced Features",
           "file": "changelog/v2.0.0.md",
           "description": "P1 (Coordinate Plotting) and F20 (Implicit Functions)",
-          "tags": ["release", "v2", "coordinates", "implicit"],
+          "tags": [
+            "release",
+            "v2",
+            "coordinates",
+            "implicit"
+          ],
           "order": 2
+        },
+        {
+          "id": "v2.1.0",
+          "title": "v2.1.0 - Video Export & Streamlined Deployment",
+          "file": "changelog/v2.1.0.md",
+          "description": "1-click Manim video rendering and single-command deployment",
+          "tags": [
+            "release",
+            "v2.1",
+            "video",
+            "manim",
+            "export"
+          ],
+          "order": 3
         },
         {
           "id": "roadmap",
           "title": "Roadmap",
           "file": "changelog/roadmap.md",
           "description": "Future features and development plans",
-          "tags": ["roadmap", "future", "features"],
-          "order": 3
+          "tags": [
+            "roadmap",
+            "future",
+            "features"
+          ],
+          "order": 4
         }
       ]
     },
@@ -201,7 +336,11 @@
           "title": "Execution Plan",
           "file": "planning/EXECUTION_PLAN.md",
           "description": "Detailed implementation plan for v2.0 features",
-          "tags": ["planning", "implementation", "roadmap"],
+          "tags": [
+            "planning",
+            "implementation",
+            "roadmap"
+          ],
           "order": 1
         },
         {
@@ -209,7 +348,11 @@
           "title": "Feature Proposals",
           "file": "planning/FEATURE_PROPOSALS.md",
           "description": "All proposed features with priorities",
-          "tags": ["features", "proposals", "backlog"],
+          "tags": [
+            "features",
+            "proposals",
+            "backlog"
+          ],
           "order": 2
         },
         {
@@ -217,7 +360,10 @@
           "title": "Implementation Roadmap",
           "file": "planning/IMPLEMENTATION_ROADMAP.md",
           "description": "High-level implementation roadmap",
-          "tags": ["roadmap", "planning"],
+          "tags": [
+            "roadmap",
+            "planning"
+          ],
           "order": 3
         },
         {
@@ -225,7 +371,10 @@
           "title": "Alternative Ideas",
           "file": "planning/alt_idea.md",
           "description": "Alternative approaches and experiments",
-          "tags": ["ideas", "experiments"],
+          "tags": [
+            "ideas",
+            "experiments"
+          ],
           "order": 4
         }
       ]
@@ -242,7 +391,10 @@
           "title": "Comprehensive Review",
           "file": "archive/COMPREHENSIVE_REVIEW.md",
           "description": "Complete project review",
-          "tags": ["review", "history"],
+          "tags": [
+            "review",
+            "history"
+          ],
           "order": 1
         },
         {
@@ -250,7 +402,10 @@
           "title": "MVP Complete Report",
           "file": "archive/MVP_COMPLETE.md",
           "description": "MVP completion summary",
-          "tags": ["mvp", "completion"],
+          "tags": [
+            "mvp",
+            "completion"
+          ],
           "order": 2
         },
         {
@@ -258,7 +413,10 @@
           "title": "Phase B Complete",
           "file": "archive/PHASE_B_COMPLETE.md",
           "description": "Phase B completion notes",
-          "tags": ["phase-b", "history"],
+          "tags": [
+            "phase-b",
+            "history"
+          ],
           "order": 3
         }
       ]

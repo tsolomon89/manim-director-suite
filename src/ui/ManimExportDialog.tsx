@@ -3,8 +3,9 @@
  * Phase 7: Rendering & Export
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ManimGenerator, type ManimExportOptions } from '../export/ManimGenerator';
+import { ManimVideoExporter, type RenderProgress, type BackendStatus } from '../export/ManimVideoExporter';
 import type { Keyframe } from '../timeline/types';
 import type { Parameter } from '../engine/types';
 import type { FunctionDefinition } from '../engine/expression-types';
@@ -35,7 +36,19 @@ export function ManimExportDialog({
   const [quality, setQuality] = useState<'draft' | 'medium' | 'high'>('medium');
   const [backgroundColor, setBackgroundColor] = useState('#000000');
 
-  const handleExport = () => {
+  // Video rendering state
+  const [isRendering, setIsRendering] = useState(false);
+  const [renderProgress, setRenderProgress] = useState<RenderProgress | null>(null);
+  const [backendStatus, setBackendStatus] = useState<BackendStatus | null>(null);
+  const [exporter] = useState(() => new ManimVideoExporter());
+
+  // Check backend status on mount
+  useEffect(() => {
+    exporter.getBackendStatus().then(setBackendStatus);
+  }, [exporter]);
+
+  // Download script only (fallback)
+  const handleDownloadScript = () => {
     try {
       const options: ManimExportOptions = {
         resolution,
@@ -71,11 +84,75 @@ export function ManimExportDialog({
         onExport(scriptContent, filename);
       }
 
-      onClose();
+      alert('✅ Python script downloaded! Run it with Manim to generate the video.');
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Export failed';
       alert(`Export Error: ${msg}`);
     }
+  };
+
+  // Render video directly
+  const handleRenderVideo = async () => {
+    if (!backendStatus?.manimInstalled) {
+      if (!backendStatus?.backendRunning) {
+        alert('⚠️ Backend rendering service not available. Downloading script instead...');
+      } else {
+        alert('⚠️ Manim is not installed. Backend is running but cannot render videos. Downloading script instead...');
+      }
+      handleDownloadScript();
+      return;
+    }
+
+    try {
+      setIsRendering(true);
+      setRenderProgress({ stage: 'generating', percent: 0, message: 'Starting render...' });
+
+      const options: ManimExportOptions = {
+        resolution,
+        fps,
+        quality,
+        backgroundColor,
+      };
+
+      const result = await exporter.renderAnimation(
+        keyframes,
+        parameters,
+        functions,
+        camera,
+        options,
+        setRenderProgress
+      );
+
+      if (!result.success) {
+        throw new Error(result.error || 'Render failed');
+      }
+
+      // Download video
+      if (result.videoDataUrl) {
+        const filename = ManimVideoExporter.generateVideoFilename(projectName);
+        exporter.downloadVideo(result.videoDataUrl, filename);
+        alert(`✅ Video rendered successfully! (${result.renderTimeSec}s, ${result.sizeMB}MB)`);
+      } else {
+        alert(`✅ Video rendered! File saved at: ${result.videoPath}`);
+      }
+
+      onClose();
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Render failed';
+      alert(`❌ Render Error: ${msg}`);
+      setRenderProgress({ stage: 'error', percent: 0, message: msg });
+    } finally {
+      setIsRendering(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (isRendering) {
+      exporter.cancel();
+      setIsRendering(false);
+      setRenderProgress(null);
+    }
+    onClose();
   };
 
   const getManimCommand = () => {
@@ -199,14 +276,57 @@ export function ManimExportDialog({
           )}
         </div>
 
+        {/* Rendering Progress */}
+        {isRendering && renderProgress && (
+          <div className="render-progress">
+            <div className="progress-bar-container">
+              <div
+                className="progress-bar-fill"
+                style={{ width: `${renderProgress.percent}%` }}
+              />
+            </div>
+            <div className="progress-message">
+              {renderProgress.message}
+            </div>
+          </div>
+        )}
+
         <div className="dialog-footer">
-          <button className="cancel-button" onClick={onClose}>
-            Cancel
+          <button className="cancel-button" onClick={handleCancel} disabled={isRendering}>
+            {isRendering ? 'Cancel Render' : 'Cancel'}
           </button>
-          <button className="export-button" onClick={handleExport}>
-            🎬 Generate Script
+          <button
+            className="export-button secondary"
+            onClick={handleDownloadScript}
+            disabled={isRendering}
+            title="Download Python script only"
+          >
+            📄 Download Script
+          </button>
+          <button
+            className="export-button"
+            onClick={handleRenderVideo}
+            disabled={isRendering || !backendStatus?.manimInstalled}
+          >
+            {isRendering ? '⏳ Rendering...' : '🎬 Render Video'}
           </button>
         </div>
+
+        {backendStatus && !backendStatus.manimInstalled && (
+          <div className="warning-box" style={{ marginTop: '1rem', backgroundColor: '#FEF3C7', color: '#92400E', padding: '0.75rem', borderRadius: '4px' }}>
+            {backendStatus.backendRunning ? (
+              <>
+                <strong>⚠️ Manim Not Installed:</strong> The backend service is running at <code>http://localhost:5001</code>,
+                but Manim executable is not found. Install Manim with <code>pip install manim</code> or use "Download Script" to render manually.
+              </>
+            ) : (
+              <>
+                <strong>⚠️ Backend Not Available:</strong> The Manim rendering service is not running.
+                Start it with <code>npm run server</code> (or <code>npm run dev:full</code>) or use "Download Script" to render manually.
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
